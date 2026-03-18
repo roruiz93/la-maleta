@@ -1,0 +1,17 @@
+{
+  "name": "la-maleta-web",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "firebase": "^10.14.1"
+  },
+  "devDependencies": {
+    "terser": "^5.26.0",
+    "vite": "^5.0.0",
+    "vite-plugin-html": "^3.2.0"
+  }
+}

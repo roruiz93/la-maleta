@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contacto — Viajes La Maleta</title>
+<meta name="description" content="Contactanos y planificamos tu viaje ideal. Respondemos en menos de 24 horas.">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./src/style.css">
+</head>
+<body>
+<!-- HEADER -->
+<header>
+  <a href="./index.html" class="logo-wrap">
+    <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
+      <rect x="5" y="13" width="34" height="24" rx="5" fill="none" stroke="#b8924a" stroke-width="2"/>
+      <path d="M14 13V10a8 8 0 0 1 16 0v3" stroke="#b8924a" stroke-width="2" stroke-linecap="round"/>
+      <rect x="19" y="20" width="6" height="8" rx="1.5" fill="none" stroke="#b8924a" stroke-width="1.8"/>
+      <path d="M5 27h34" stroke="#b8924a" stroke-width="1.5" stroke-dasharray="3 2.5"/>
+    </svg>
+    <div class="logo-txt"><span class="v">Viajes</span><span class="n">La Maleta</span></div>
+  </a>
+  <nav>
+    <a href="./destinos.html">Destinos</a>
+    <a href="./informacion.html">Experiencias</a>
+    <a href="./nosotros.html">Nosotros</a>
+    <a href="./contacto.html" class="nav-active">Contacto</a>
+    <a href="./contacto.html" class="nav-cta">Solicitá info</a>
+  </nav>
+  <div class="lang-switcher"></div>
+  <button class="hamburger" onclick="toggleMenu()" aria-label="Menú"><span></span><span></span><span></span></button>
+</header>
+<div class="mobile-menu" id="mobile-menu">
+  <a href="./destinos.html">Destinos</a>
+  <a href="./informacion.html">Experiencias</a>
+  <a href="./nosotros.html">Nosotros</a>
+  <a href="./contacto.html">Contacto</a>
+  <a href="./contacto.html" class="nav-cta">Solicitá info</a>
+</div>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <span class="page-hero-tag">Estamos para ayudarte</span>
+  <h1 data-field="contacto-h1">Contactanos</h1>
+  <p data-field="contacto-sub">Respondemos en menos de 24 horas. Planifiquemos juntos tu próximo viaje.</p>
+</div>
+<div class="breadcrumb">
+  <a href="./index.html">Inicio</a><span>›</span> Contacto
+</div>
+
+<!-- CONTENIDO -->
+<div class="contacto-wrap">
+
+  <!-- Izquierda: info + WhatsApp -->
+  <div class="contacto-info">
+    <h2 data-field="contacto-info-h">¿En qué podemos ayudarte?</h2>
+    <p data-field="contacto-info-p">Ya sea que estés buscando un destino específico, querés armar un viaje a medida o simplemente tenés dudas — estamos acá para ayudarte en cada paso.</p>
+
+    <div class="contacto-datos">
+      <div class="cd-item">
+        <div class="cd-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5" width="20" height="20">
+            <path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+          </svg>
+        </div>
+        <span id="footer-tel" data-field="f-tel">+54 9 11 0000-0000</span>
+      </div>
+      <div class="cd-item">
+        <div class="cd-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5" width="20" height="20">
+            <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+          </svg>
+        </div>
+        <span id="footer-email" data-field="f-email">info@lamaleta.com</span>
+      </div>
+      <div class="cd-item">
+        <div class="cd-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5" width="20" height="20">
+            <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+            <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+          </svg>
+        </div>
+        <span id="footer-addr" data-field="f-addr">Buenos Aires, Argentina</span>
+      </div>
+      <div class="cd-item">
+        <div class="cd-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5" width="20" height="20">
+            <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+        </div>
+        <span id="footer-hours" data-field="f-hours">Lun–Vie 9:00–18:00</span>
+      </div>
+    </div>
+
+    <!-- Botón WhatsApp grande -->
+    <a id="c-wa-link" href="https://wa.me/5491100000000?text=Hola%2C+quiero+informaci%C3%B3n+sobre+un+viaje"
+       target="_blank" rel="noopener" class="wa-big-btn">
+      <svg viewBox="0 0 24 24" fill="currentColor" width="26" height="26">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+      </svg>
+      <span data-field="wa-btn-txt">Escribinos por WhatsApp</span>
+    </a>
+  </div>
+
+  <!-- Derecha: formulario -->
+  <div class="form-box">
+    <h3 data-field="form-titulo">Envianos tu consulta</h3>
+    <p data-field="form-subtitulo">Completá el formulario y te respondemos a la brevedad.</p>
+
+    <!-- Honeypot anti-bot -->
+    <div style="position:absolute;left:-9999px;opacity:0;height:0;overflow:hidden;">
+      <input type="text" id="hp-c" name="website" tabindex="-1" autocomplete="off">
+    </div>
+
+    <div class="form-row">
+      <div class="form-field">
+        <label>Nombre *</label>
+        <input type="text" id="c-nombre" placeholder="Tu nombre" maxlength="100">
+      </div>
+      <div class="form-field">
+        <label>Email *</label>
+        <input type="email" id="c-email" placeholder="tu@email.com" maxlength="200">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-field">
+        <label>Teléfono (opcional)</label>
+        <input type="tel" id="c-tel" placeholder="+54 9 11 0000-0000" maxlength="30">
+      </div>
+      <div class="form-field">
+        <label>Asunto</label>
+        <input type="text" id="c-asunto" placeholder="¿En qué te podemos ayudar?" maxlength="150">
+      </div>
+    </div>
+    <div class="form-field">
+      <label>Mensaje *</label>
+      <textarea id="c-msg" placeholder="Contanos sobre el viaje que estás buscando..." rows="4"></textarea>
+    </div>
+    <button class="form-submit" id="c-submit" onclick="enviarContacto()">
+      Enviar mensaje
+    </button>
+    <div class="form-success" id="c-ok">
+      ✅ ¡Gracias por tu mensaje! Te contactamos en las próximas 24 horas.
+    </div>
+    <div class="form-error" id="c-err"></div>
+  </div>
+
+</div><!-- /contacto-wrap -->
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <svg width="40" height="40" viewBox="0 0 44 44" fill="none">
+        <rect x="5" y="13" width="34" height="24" rx="5" fill="none" stroke="#b8924a" stroke-width="2"/>
+        <path d="M14 13V10a8 8 0 0 1 16 0v3" stroke="#b8924a" stroke-width="2" stroke-linecap="round"/>
+        <rect x="19" y="20" width="6" height="8" rx="1.5" fill="none" stroke="#b8924a" stroke-width="1.8"/>
+      </svg>
+      <div>
+        <span class="footer-name">La Maleta</span>
+        <span class="footer-slogan" data-field="footer-slogan">Viajes que te cambian la vida</span>
+      </div>
+    </div>
+    <div class="footer-links">
+      <div class="fl-col">
+        <div class="fl-title">Páginas</div>
+        <a href="./destinos.html">Destinos</a>
+        <a href="./informacion.html">Experiencias</a>
+        <a href="./nosotros.html">Nosotros</a>
+        <a href="./contacto.html">Contacto</a>
+      </div>
+      <div class="fl-col">
+        <div class="fl-title">Contacto</div>
+        <span>+54 9 11 0000-0000</span>
+        <span>info@lamaleta.com</span>
+        <span>Buenos Aires, Argentina</span>
+        <span>Lun–Vie 9:00–18:00</span>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">© <span id="footer-year"></span> Viajes La Maleta. Todos los derechos reservados.</div>
+</footer>
+
+<script type="module">
+  import { initShared, applyContent } from "./src/componentes/_shared.js";
+  import "./src/componentes/contacto.js";
+  import { listenContent } from "./src/firebase.js";
+  initShared();
+  listenContent(applyContent);
+</script>
+</body>
+</html>

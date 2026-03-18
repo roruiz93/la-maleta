@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Experiencias — Viajes La Maleta</title>
+<meta name="description" content="Experiencias únicas: trekking, buceo, gastronomía, cultura y mucho más.">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./src/style.css">
+</head>
+<body>
+
+<header>
+  <a href="./index.html" class="logo-wrap">
+    <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
+      <rect x="5" y="13" width="34" height="24" rx="5" fill="none" stroke="#b8924a" stroke-width="2"/>
+      <path d="M14 13V10a8 8 0 0 1 16 0v3" stroke="#b8924a" stroke-width="2" stroke-linecap="round"/>
+      <rect x="19" y="20" width="6" height="8" rx="1.5" fill="none" stroke="#b8924a" stroke-width="1.8"/>
+      <path d="M5 27h34" stroke="#b8924a" stroke-width="1.5" stroke-dasharray="3 2.5"/>
+    </svg>
+    <div class="logo-txt">
+      <span class="v">Viajes</span>
+      <span class="n">La Maleta</span>
+    </div>
+  </a>
+  <nav>
+    <a href="./destinos.html">Destinos</a>
+    <a href="./informacion.html" class="nav-active">Experiencias</a>
+    <a href="./nosotros.html">Nosotros</a>
+    <a href="./blog.html">Blog</a>
+    <a href="./contacto.html">Contacto</a>
+    <a href="./contacto.html" class="nav-cta">Solicitá información</a>
+  </nav>
+  <div class="lang-switcher"></div>
+  <button class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+</header>
+<div class="mobile-menu" id="mobile-menu">
+  <a href="./destinos.html">Destinos</a>
+  <a href="./informacion.html">Experiencias</a>
+  <a href="./nosotros.html">Nosotros</a>
+  <a href="./blog.html">Blog</a>
+  <a href="./contacto.html">Contacto</a>
+  <a href="./contacto.html" class="nav-cta">Solicitá información</a>
+</div>
+
+<div class="page-hero">
+  <span class="page-hero-tag">Lo que ofrecemos</span>
+  <h1 data-field="exp-hero-h1">Experiencias Únicas</h1>
+  <p data-field="exp-hero-p">Más que un viaje — momentos que recordarás toda la vida.</p>
+</div>
+<div class="breadcrumb">
+  <a href="./index.html">Inicio</a><span>›</span><span>Experiencias</span>
+</div>
+
+<div class="page-wrap">
+  <div id="exp-grid">
+    <div class="loading"><div class="spinner"></div>Cargando experiencias...</div>
+  </div>
+</div>
+
+<footer id="footer-main">
+  <div class="footer-top">
+    <div class="footer-brand">
+      <svg width="38" height="38" viewBox="0 0 44 44" fill="none"><rect x="5" y="13" width="34" height="24" rx="5" fill="none" stroke="#b8924a" stroke-width="2"/><path d="M14 13V10a8 8 0 0 1 16 0v3" stroke="#b8924a" stroke-width="2" stroke-linecap="round"/><rect x="19" y="20" width="6" height="8" rx="1.5" fill="none" stroke="#b8924a" stroke-width="1.8"/></svg>
+      <div><span class="footer-name">La Maleta</span><span class="footer-slogan" data-field="footer-slogan">Viajes que te cambian la vida</span></div>
+    </div>
+    <div class="footer-links">
+      <div class="fl-col">
+        <div class="fl-title">Páginas</div>
+        <a href="./destinos.html">Destinos</a>
+        <a href="./informacion.html">Experiencias</a>
+        <a href="./nosotros.html">Nosotros</a>
+        <a href="./blog.html">Blog</a>
+        <a href="./contacto.html">Contacto</a>
+      </div>
+      <div class="fl-col">
+        <div class="fl-title">Contacto</div>
+        <span id="footer-tel"   data-field="f-tel">+54 9 11 0000-0000</span>
+        <span id="footer-email" data-field="f-email">info@lamaleta.com</span>
+        <span id="footer-addr"  data-field="f-addr">Buenos Aires, Argentina</span>
+        <span id="footer-hours" data-field="f-hours">Lun–Vie 9:00–18:00</span>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© <span id="footer-year"></span> Viajes La Maleta. Todos los derechos reservados.</span>
+  </div>
+</footer>
+
+<script type="module" src="./src/componentes/informacion.js"></script>
+</body>
+</html>

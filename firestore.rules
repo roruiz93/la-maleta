@@ -1,0 +1,45 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isLoggedIn() { return request.auth != null; }
+    function myRole() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role;
+    }
+    function isSuperAdmin() { return isLoggedIn() && myRole() == 'superadmin'; }
+    function isEditor() { return isLoggedIn() && myRole() in ['superadmin','admin','editor']; }
+
+    // Sitio (textos, colores, imágenes, settings)
+    match /site/content  { allow read: if true; allow write: if isEditor(); }
+    match /site/colors   { allow read: if true; allow write: if isEditor(); }
+    match /site/images   { allow read: if true; allow write: if isEditor(); }
+    match /site/settings { allow read: if true; allow write: if isEditor(); }
+
+    // Destinos
+    match /destinos/{id}     { allow read: if true; allow write: if isEditor(); }
+
+    // Experiencias
+    match /experiencias/{id} { allow read: if true; allow write: if isEditor(); }
+
+    // Blog posts
+    match /posts/{id}        { allow read: if true; allow write: if isEditor(); }
+
+    // Consultas — cualquiera puede crear, solo admins pueden leer
+    match /consultas/{id} {
+      allow create: if true;
+      allow read, update, delete: if isEditor();
+    }
+
+    // Usuarios
+    match /users/{uid} {
+      allow read:   if isLoggedIn();
+      allow create: if isSuperAdmin()
+        && request.resource.data.keys().hasOnly(['email','name','role','createdAt'])
+        && request.resource.data.role in ['editor','admin','superadmin'];
+      allow delete: if isSuperAdmin() && uid != request.auth.uid;
+      allow update: if false;
+    }
+
+    match /{document=**} { allow read, write: if false; }
+  }
+}

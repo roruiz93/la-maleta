@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Viajes La Maleta</title>
+<meta name="description" content="Organizamos los viajes que siempre soñaste. Destinos únicos con trato cercano y personalizado.">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./src/style.css">
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <a href="./index.html" class="logo-wrap">
+    <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
+      <rect x="5" y="13" width="34" height="24" rx="5" fill="none" stroke="#b8924a" stroke-width="2"/>
+      <path d="M14 13V10a8 8 0 0 1 16 0v3" stroke="#b8924a" stroke-width="2" stroke-linecap="round"/>
+      <rect x="19" y="20" width="6" height="8" rx="1.5" fill="none" stroke="#b8924a" stroke-width="1.8"/>
+      <path d="M5 27h34" stroke="#b8924a" stroke-width="1.5" stroke-dasharray="3 2.5"/>
+    </svg>
+    <div class="logo-txt">
+      <span class="v">Viajes</span>
+      <span class="n" data-field="logo">La Maleta</span>
+    </div>
+  </a>
+  <nav>
+    <a href="./destinos.html"     data-field="nav1">Destinos</a>
+    <a href="./informacion.html" data-field="nav2">Experiencias</a>
+    <a href="./nosotros.html"    data-field="nav3">Nosotros</a>
+    <a href="./blog.html"        data-field="nav4">Blog</a>
+    <a href="./contacto.html"    data-field="nav5">Contacto</a>
+    <a href="./contacto.html" class="nav-cta" data-field="nav-cta">Solicitá información</a>
+  </nav>
+  <div id="lang-switcher" class="lang-switcher"></div>
+  <button class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+</header>
+<div class="mobile-menu" id="mobile-menu">
+  <a href="./destinos.html">Destinos</a>
+  <a href="./informacion.html">Experiencias</a>
+  <a href="./nosotros.html">Nosotros</a>
+  <a href="./blog.html">Blog</a>
+  <a href="./contacto.html">Contacto</a>
+  <a href="./contacto.html" class="nav-cta">Solicitá información</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-wrap">
+    <img id="hero-img" data-img="hero-img" src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600&q=80" alt="Hero">
+  </div>
+  <div class="hero-overlay" id="hero-ov"></div>
+  <div class="hero-content">
+    <h1 data-field="hero-h1">Organizamos los viajes<br>que siempre soñaste</h1>
+    <p class="hero-sub" data-field="hero-sub">Descubrí destinos únicos con un trato cercano y personalizado</p>
+    <div class="hero-btns">
+      <a href="./destinos.html" class="btn-gold" data-field="hero-btn1">Ver Destinos</a>
+      <a href="./nosotros.html" class="btn-outline" data-field="hero-btn2">Sobre Nosotros</a>
+    </div>
+  </div>
+</section>
+
+<!-- DESTINOS DESTACADOS -->
+<div class="sw">
+  <div class="sec-head"><h2 data-field="dest-title">Destinos Destacados</h2><div class="sec-div"></div></div>
+  <!-- Grid dinámico desde Firebase -->
+  <div class="dest-grid" id="home-destinos">
+    <div class="dc"><div class="dc-img"><img data-img="d1-img" src="https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=600&q=80" alt="Noruega"></div><div class="dc-body"><div class="dc-name" data-field="d1-name">Noruega</div><div class="dc-desc" data-field="d1-desc">7 Días, desde $1200</div><button class="ver-btn" data-field="d1-btn" onclick="irDestino(0)">Ver más</button></div></div>
+    <div class="dc"><div class="dc-img"><img data-img="d2-img" src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=600&q=80" alt="Japón"></div><div class="dc-body"><div class="dc-name" data-field="d2-name">Japón</div><div class="dc-desc" data-field="d2-desc">7 Días, desde $1200</div><button class="ver-btn" data-field="d2-btn" onclick="irDestino(1)">Ver más</button></div></div>
+    <div class="dc"><div class="dc-img"><img data-img="d3-img" src="https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=600&q=80" alt="Maldivas"></div><div class="dc-body"><div class="dc-name" data-field="d3-name">Maldivas</div><div class="dc-desc" data-field="d3-desc">7 Días, desde $1200</div><button class="ver-btn" data-field="d3-btn" onclick="irDestino(2)">Ver más</button></div></div>
+    <div class="dc"><div class="dc-img"><img data-img="d4-img" src="https://images.unsplash.com/photo-1501854140801-50d01698950b?w=600&q=80" alt="Patagonia"></div><div class="dc-body"><div class="dc-name" data-field="d4-name">Patagonia</div><div class="dc-desc" data-field="d4-desc">7 Días, desde $1200</div><button class="ver-btn" data-field="d4-btn" onclick="irDestino(3)">Ver más</button></div></div>
+  </div>
+  <div class="ver-todos-wrap"><a href="./destinos.html" class="ver-todos" data-field="ver-todos">Ver Todos los Viajes  ›</a></div>
+</div>
+
+<!-- POR QUÉ ELEGIRNOS -->
+<div class="pq-sec">
+  <div class="pq-title" data-field="pq-title">¿Por Qué Elegirnos?</div>
+  <div class="pq-grid">
+    <div><div class="pq-icon"><svg viewBox="0 0 36 36" fill="none"><circle cx="13" cy="13" r="5" stroke="#b8924a" stroke-width="2"/><circle cx="23" cy="13" r="5" stroke="#b8924a" stroke-width="2"/><path d="M4 30c1-5 5-7 9-7M23 30c2-4 6-6 9-6M13 23c0-3 2-5 5-5s5 2 5 5" stroke="#b8924a" stroke-width="2" stroke-linecap="round"/></svg></div><div class="pq-lbl" data-field="pq1">Atención Personalizada</div></div>
+    <div><div class="pq-icon"><svg viewBox="0 0 36 36" fill="none"><path d="M9 10h18M9 18h18M9 26h10" stroke="#b8924a" stroke-width="2" stroke-linecap="round"/><circle cx="27" cy="26" r="5" stroke="#b8924a" stroke-width="2"/><path d="M25 26l1.5 1.5L29 24" stroke="#b8924a" stroke-width="1.8" stroke-linecap="round"/></svg></div><div class="pq-lbl" data-field="pq2">Viajes a tu Medida</div></div>
+    <div><div class="pq-icon"><svg viewBox="0 0 36 36" fill="none"><path d="M18 4l2.5 8H28l-6.5 4.5 2.5 8L18 20l-6 4.5 2.5-8L8 12h7.5z" stroke="#b8924a" stroke-width="2" stroke-linejoin="round"/></svg></div><div class="pq-lbl" data-field="pq3">Seguridad y Confianza</div></div>
+    <div><div class="pq-icon"><svg viewBox="0 0 36 36" fill="none"><circle cx="18" cy="18" r="12" stroke="#b8924a" stroke-width="2"/><ellipse cx="18" cy="18" rx="5" ry="12" stroke="#b8924a" stroke-width="2"/><path d="M6 18h24M8 12h20M8 24h20" stroke="#b8924a" stroke-width="1.5"/></svg></div><div class="pq-lbl" data-field="pq4">20 Años de Experiencia</div></div>
+  </div>
+</div>
+
+<!-- TESTIMONIOS -->
+<div class="test-sec">
+  <div class="test-title" data-field="test-title">Testimonios de Nuestros Viajeros</div>
+  <div class="test-grid">
+    <div class="tc"><div class="tc-img"><img data-img="t1-img" src="https://images.unsplash.com/photo-1500917293891-ef795e70e1f6?w=600&q=80" alt="Laura"></div><div class="tc-body"><div class="stars">★★★★★</div><div class="tc-name" data-field="t1-name">Laura Gómez</div><div class="tc-text" data-field="t1-text">"Un viaje increíble, superado todas nuestras expectativas!"</div></div></div>
+    <div class="tc"><div class="tc-img"><img data-img="t2-img" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80" alt="Jorge"></div><div class="tc-body"><div class="stars">★★★★★</div><div class="tc-name" data-field="t2-name">Jorge Martin</div><div class="tc-text" data-field="t2-text">"Una experiencia inolvidable, atención de primera!"</div></div></div>
+    <div class="tc"><div class="tc-img"><img data-img="t3-img" src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=600&q=80" alt="Carmen"></div><div class="tc-body"><div class="stars">★★★★☆</div><div class="tc-name" data-field="t3-name">Carmen Ruiz</div><div class="tc-text" data-field="t3-text">"Sin duda volveremos a viajar con ustedes, todo perfecto."</div></div></div>
+  </div>
+</div>
+
+<!-- CTA -->
+<section class="cta-sec">
+  <div class="cta-bg-wrap"><img data-img="cta-img" src="https://images.unsplash.com/photo-1448375240586-882707db888b?w=1600&q=80" alt="CTA"></div>
+  <div class="cta-ov"></div>
+  <div class="cta-content">
+    <h2 data-field="cta-h">Solicitá información sobre tu próximo viaje</h2>
+    <p data-field="cta-p">¿Listo para tu próxima aventura? Contactanos y te ayudaremos a planear el viaje perfecto.</p>
+    <a href="./contacto.html" class="btn-gold" data-field="cta-btn">Solicitá información</a>
+  </div>
+</section>
+
+<!-- FOOTER DINÁMICO -->
+<footer id="footer-main">
+  <div class="footer-top">
+    <div class="footer-brand">
+      <svg width="38" height="38" viewBox="0 0 44 44" fill="none"><rect x="5" y="13" width="34" height="24" rx="5" fill="none" stroke="#b8924a" stroke-width="2"/><path d="M14 13V10a8 8 0 0 1 16 0v3" stroke="#b8924a" stroke-width="2" stroke-linecap="round"/><rect x="19" y="20" width="6" height="8" rx="1.5" fill="none" stroke="#b8924a" stroke-width="1.8"/></svg>
+      <div><span class="footer-name">La Maleta</span><span class="footer-slogan" data-field="footer-slogan">Viajes que te cambian la vida</span></div>
+    </div>
+    <div class="footer-links">
+      <div class="fl-col">
+        <div class="fl-title">Páginas</div>
+        <a href="./destinos.html">Destinos</a>
+        <a href="./experiencias.html">Experiencias</a>
+        <a href="./nosotros.html">Nosotros</a>
+        <a href="./blog.html">Blog</a>
+        <a href="./contacto.html">Contacto</a>
+      </div>
+      <div class="fl-col">
+        <div class="fl-title">Contacto</div>
+        <span id="footer-tel" data-field="f-tel">+1 (442) 456-7825</span>
+        <span id="footer-email" data-field="f-email">info@lamaleta.com</span>
+        <span id="footer-addr" data-field="f-addr">Buenos Aires, Argentina</span>
+        <span id="footer-hours" data-field="f-hours">Lun–Vie 9:00–18:00</span>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© <span id="footer-year"></span> Viajes La Maleta. Todos los derechos reservados.</span>
+  </div>
+</footer>
+
+<script type="module" src="./src/web.js"></script>
+<script type="module">
+import { listenDestinos, listenSettings } from "./src/firebase.js";
+
+document.getElementById("footer-year").textContent = new Date().getFullYear();
+
+// Botones "Ver más" conectados a Firebase destinos
+let destinosIds = [];
+listenDestinos((items) => {
+  destinosIds = items.map(d => d.id);
+});
+
+window.irDestino = function(idx) {
+  if (destinosIds[idx]) {
+    window.location.href = `./ver-destino.html?id=${destinosIds[idx]}`;
+  } else {
+    window.location.href = "./destinos.html";
+  }
+};
+
+// Footer dinámico desde settings
+listenSettings((s) => {
+  if (s.tel)   document.getElementById("footer-tel").textContent   = s.tel;
+  if (s.email) document.getElementById("footer-email").textContent = s.email;
+  if (s.addr)  document.getElementById("footer-addr").textContent  = s.addr;
+  if (s.hours) document.getElementById("footer-hours").textContent = s.hours;
+});
+
+window.toggleMenu = function() {
+  document.getElementById("mobile-menu").classList.toggle("open");
+};
+</script>
+</body>
+</html>
