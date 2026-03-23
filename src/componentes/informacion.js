@@ -3,12 +3,12 @@
 //  Página de Información / Experiencias
 //  Muestra las experiencias cargadas desde Firebase
 // ============================================================
-import { listenExperiencias, listenContent, listenSettings } from "../firebase.js";
-import { initShared, applyContent, buildWhatsApp } from "./_shared.js";
+import { listenExperiencias, listenSettings } from "../firebase.js";
+import { initShared, buildWhatsApp } from "./_shared.js";
 
 window.addEventListener("DOMContentLoaded", () => {
   initShared();
-  listenContent(applyContent);
+
 
   listenExperiencias(items => {
     renderExperiencias(items.filter(e => e.activo !== false));

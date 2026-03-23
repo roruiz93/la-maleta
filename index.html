@@ -5,6 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Viajes La Maleta</title>
 <meta name="description" content="Organizamos los viajes que siempre soñaste. Destinos únicos con trato cercano y personalizado.">
+<script>
+  try {
+    const c = JSON.parse(localStorage.getItem("lm_colors") || "{}");
+    const r = document.documentElement.style;
+    if (c.gold)    r.setProperty("--gold",     c.gold);
+    if (c.bg)      r.setProperty("--bg",       c.bg);
+    if (c.text)    r.setProperty("--text",     c.text);
+    if (c.primary) r.setProperty("--primary",  c.primary);
+    if (c.cardBg)  r.setProperty("--card-bg",  c.cardBg);
+  } catch(e) {}
+</script>
+
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="./src/style.css">
 </head>
@@ -136,36 +148,5 @@
 </footer>
 
 <script type="module" src="./src/web.js"></script>
-<script type="module">
-import { listenDestinos, listenSettings } from "./src/firebase.js";
-
-document.getElementById("footer-year").textContent = new Date().getFullYear();
-
-// Botones "Ver más" conectados a Firebase destinos
-let destinosIds = [];
-listenDestinos((items) => {
-  destinosIds = items.map(d => d.id);
-});
-
-window.irDestino = function(idx) {
-  if (destinosIds[idx]) {
-    window.location.href = `./ver-destino.html?id=${destinosIds[idx]}`;
-  } else {
-    window.location.href = "./destinos.html";
-  }
-};
-
-// Footer dinámico desde settings
-listenSettings((s) => {
-  if (s.tel)   document.getElementById("footer-tel").textContent   = s.tel;
-  if (s.email) document.getElementById("footer-email").textContent = s.email;
-  if (s.addr)  document.getElementById("footer-addr").textContent  = s.addr;
-  if (s.hours) document.getElementById("footer-hours").textContent = s.hours;
-});
-
-window.toggleMenu = function() {
-  document.getElementById("mobile-menu").classList.toggle("open");
-};
-</script>
 </body>
 </html>

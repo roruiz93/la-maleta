@@ -5,6 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Nosotros — Viajes La Maleta</title>
 <meta name="description" content="Conocé al equipo detrás de Viajes La Maleta. Apasionados por los viajes desde 2010.">
+<script>
+  try {
+    const c = JSON.parse(localStorage.getItem("lm_colors") || "{}");
+    const r = document.documentElement.style;
+    if (c.gold)    r.setProperty("--gold",     c.gold);
+    if (c.bg)      r.setProperty("--bg",       c.bg);
+    if (c.text)    r.setProperty("--text",     c.text);
+    if (c.primary) r.setProperty("--primary",  c.primary);
+    if (c.cardBg)  r.setProperty("--card-bg",  c.cardBg);
+  } catch(e) {}
+</script>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="./src/style.css">
 </head>
@@ -212,17 +223,13 @@
 </footer>
 
 <script type="module">
-  import { initShared, applyContent } from "./src/componentes/_shared.js";
-  import "./src/componentes/nosotros.js";
-  import { listenContent, listenImages } from "./src/firebase.js";
+  import { initShared } from "./src/componentes/_shared.js";
+  import { listenImages } from "./src/firebase.js";
   initShared();
-  listenContent(applyContent);
-  // Imágenes del equipo
   listenImages(imgs => {
     if (!imgs) return;
     document.querySelectorAll("[data-img]").forEach(el => {
-      const key = el.dataset.img;
-      if (imgs[key]) el.src = imgs[key];
+      if (imgs[el.dataset.img]) el.src = imgs[el.dataset.img];
     });
   });
 </script>

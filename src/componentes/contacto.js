@@ -2,13 +2,13 @@
 //  componentes/contacto.js
 //  Página de contacto con formulario protegido
 // ============================================================
-import { saveConsulta, listenSettings, listenContent } from "../firebase.js";
-import { initShared, applyContent } from "./_shared.js";
+import { saveConsulta, listenSettings } from "../firebase.js";
+import { initShared } from "./_shared.js";
 import { sanitize, validateContactForm, checkRateLimit } from "../security.js";
 
 window.addEventListener("DOMContentLoaded", () => {
   initShared();
-  listenContent(applyContent);
+
 
   // Pre-llenar asunto desde query param (ej: llega desde ver-destino)
   const params  = new URLSearchParams(location.search);

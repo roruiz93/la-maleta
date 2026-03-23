@@ -5,6 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Contacto — Viajes La Maleta</title>
 <meta name="description" content="Contactanos y planificamos tu viaje ideal. Respondemos en menos de 24 horas.">
+<script>
+  try {
+    const c = JSON.parse(localStorage.getItem("lm_colors") || "{}");
+    const r = document.documentElement.style;
+    if (c.gold)    r.setProperty("--gold",     c.gold);
+    if (c.bg)      r.setProperty("--bg",       c.bg);
+    if (c.text)    r.setProperty("--text",     c.text);
+    if (c.primary) r.setProperty("--primary",  c.primary);
+    if (c.cardBg)  r.setProperty("--card-bg",  c.cardBg);
+  } catch(e) {}
+</script>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="./src/style.css">
 </head>
@@ -182,11 +193,9 @@
 </footer>
 
 <script type="module">
-  import { initShared, applyContent } from "./src/componentes/_shared.js";
+  import { initShared } from "./src/componentes/_shared.js";
   import "./src/componentes/contacto.js";
-  import { listenContent } from "./src/firebase.js";
   initShared();
-  listenContent(applyContent);
 </script>
 </body>
 </html>
