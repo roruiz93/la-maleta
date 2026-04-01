@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Destinos — Viajes La Maleta</title>
-<meta name="description" content="Explorá todos nuestros destinos. Viajes únicos con trato personalizado.">
+<title>Blog — Viajes La Maleta</title>
+<meta name="description" content="Consejos de viaje, destinos únicos y experiencias de nuestros viajeros.">
 <script>
   try {
     const c = JSON.parse(localStorage.getItem("lm_colors") || "{}");
@@ -29,56 +29,51 @@
       <rect x="19" y="20" width="6" height="8" rx="1.5" fill="none" stroke="#b8924a" stroke-width="1.8"/>
       <path d="M5 27h34" stroke="#b8924a" stroke-width="1.5" stroke-dasharray="3 2.5"/>
     </svg>
-    <div class="logo-txt"><span class="v">Viajes</span><span class="n" data-field="logo">La Maleta</span></div>
+    <div class="logo-txt">
+      <span class="v">Viajes</span>
+      <span class="n">La Maleta</span>
+    </div>
   </a>
   <nav>
-    <a href="./destinos.html" class="nav-active" data-field="nav1">Destinos</a>
+    <a href="./destinos.html"    data-field="nav1">Destinos</a>
     <a href="./informacion.html" data-field="nav2">Experiencias</a>
-    <a href="./nosotros.html"   data-field="nav3">Nosotros</a>
-    <a href="./blog.html"       data-field="nav4">Blog</a>
-    <a href="./contacto.html"   data-field="nav5">Contacto</a>
-    <a href="./contacto.html" class="nav-cta" data-field="nav-cta">Solicitá información</a>
+    <a href="./nosotros.html"    data-field="nav3">Nosotros</a>
+    <a href="./blog.html"        data-field="nav4" class="nav-active">Blog</a>
+    <a href="./contacto.html"    data-field="nav5">Contacto</a>
+    <a href="./contacto.html"    data-field="nav-cta" class="nav-cta">Solicitá información</a>
   </nav>
   <div id="lang-switcher" class="lang-switcher"></div>
   <button class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
 </header>
 <div class="mobile-menu" id="mobile-menu">
-  <a href="./destinos.html">Destinos</a>
-  <a href="./informacion.html">Experiencias</a>
-  <a href="./nosotros.html">Nosotros</a>
-  <a href="./blog.html">Blog</a>
-  <a href="./contacto.html">Contacto</a>
-  <a href="./contacto.html" class="nav-cta">Solicitá información</a>
+  <a href="./destinos.html"    data-field="nav1">Destinos</a>
+  <a href="./informacion.html" data-field="nav2">Experiencias</a>
+  <a href="./nosotros.html"    data-field="nav3">Nosotros</a>
+  <a href="./blog.html"        data-field="nav4">Blog</a>
+  <a href="./contacto.html"    data-field="nav5">Contacto</a>
+  <a href="./contacto.html"    data-field="nav-cta" class="nav-cta">Solicitá información</a>
 </div>
 
 <div class="page-hero">
-  <span class="page-hero-tag">Nuestros viajes</span>
-  <h1 data-field="dest-title">Destinos Destacados</h1>
-  <p>Encontrá el viaje perfecto para vos</p>
+  <span class="page-hero-tag" data-field="blog-hero-tag">Blog</span>
+  <h1 data-field="blog-hero-h1">Consejos e Inspiración para Viajeros</h1>
+  <p data-field="blog-hero-p">Historias, consejos y guías de viaje para tu próxima aventura.</p>
 </div>
 <div class="breadcrumb">
-  <a href="./index.html">Inicio</a><span>›</span><span>Destinos</span>
+  <a href="./index.html" data-field="breadcrumb-inicio">Inicio</a><span>›</span><span data-field="breadcrumb-blog">Blog</span>
 </div>
 
 <div class="page-wrap">
-  <div class="destinos-filtros" id="filtros"></div>
-  <div id="dest-grid">
-    <div class="loading"><div class="spinner"></div>Cargando destinos...</div>
+  <div id="blog-grid">
+    <div class="loading"><div class="spinner"></div>Cargando posts...</div>
   </div>
 </div>
 
-<footer>
+<footer id="footer-main">
   <div class="footer-top">
     <div class="footer-brand">
-      <svg width="40" height="40" viewBox="0 0 44 44" fill="none">
-        <rect x="5" y="13" width="34" height="24" rx="5" fill="none" stroke="#b8924a" stroke-width="2"/>
-        <path d="M14 13V10a8 8 0 0 1 16 0v3" stroke="#b8924a" stroke-width="2" stroke-linecap="round"/>
-        <rect x="19" y="20" width="6" height="8" rx="1.5" fill="none" stroke="#b8924a" stroke-width="1.8"/>
-      </svg>
-      <div>
-        <span class="footer-name">La Maleta</span>
-        <span class="footer-slogan" data-field="footer-slogan">Viajes que te cambian la vida</span>
-      </div>
+      <svg width="38" height="38" viewBox="0 0 44 44" fill="none"><rect x="5" y="13" width="34" height="24" rx="5" fill="none" stroke="#b8924a" stroke-width="2"/><path d="M14 13V10a8 8 0 0 1 16 0v3" stroke="#b8924a" stroke-width="2" stroke-linecap="round"/><rect x="19" y="20" width="6" height="8" rx="1.5" fill="none" stroke="#b8924a" stroke-width="1.8"/></svg>
+      <div><span class="footer-name">La Maleta</span><span class="footer-slogan" data-field="footer-slogan">Viajes que te cambian la vida</span></div>
     </div>
     <div class="footer-links">
       <div class="fl-col">
@@ -91,14 +86,16 @@
       </div>
       <div class="fl-col">
         <div class="fl-title">Contacto</div>
-        <span id="footer-tel">+54 9 11 0000-0000</span>
-        <span id="footer-email">info@lamaleta.com</span>
-        <span id="footer-addr">Buenos Aires, Argentina</span>
-        <span id="footer-hours">Lun–Vie 9:00–18:00</span>
+        <span id="footer-tel"   data-field="f-tel">+54 9 11 0000-0000</span>
+        <span id="footer-email" data-field="f-email">info@lamaleta.com</span>
+        <span id="footer-addr"  data-field="f-addr">Buenos Aires, Argentina</span>
+        <span id="footer-hours" data-field="f-hours">Lun–Vie 9:00–18:00</span>
       </div>
     </div>
   </div>
-  <div class="footer-bottom">© <span id="footer-year"></span> Viajes La Maleta. Todos los derechos reservados.</div>
+  <div class="footer-bottom">
+    <span>© <span id="footer-year"></span> Viajes La Maleta. Todos los derechos reservados.</span>
+  </div>
 </footer>
 
 <!-- Firebase CDN -->
@@ -111,19 +108,10 @@
 <script src="./src/i18n-compat.js"></script>
 
 <script>
-  let todos = [];
-  let filtro = "todos";
-
-  window.addEventListener("DOMContentLoaded", () => {
-    waitForDependencies().then(() => {
-      initShared();
-
-      window.listenDestinos(items => {
-        todos = items.filter(d => d.activo !== false);
-        renderFiltros();
-        renderGrid(todos);
-      });
-    });
+  window.addEventListener("DOMContentLoaded", async () => {
+    await waitForDependencies();
+    initShared();
+    await cargarPosts();
   });
 
   function waitForDependencies() {
@@ -223,60 +211,50 @@
     });
   }
 
-  // ─── Filtros por categoría ────────────────────────────────
-  function renderFiltros() {
-    const wrap = document.getElementById("filtros");
-    if (!wrap) return;
-    const cats = ["todos", ...new Set(todos.map(d => d.categoria).filter(Boolean))];
-    if (cats.length <= 2) { wrap.innerHTML = ""; return; }
-    wrap.innerHTML = cats.map(c => `
-      <button class="filtro-btn ${c === filtro ? "active" : ""}" onclick="filtrarDest('${c}')">
-        ${c === "todos" ? "Todos" : c}
-      </button>`).join("");
-  }
+  async function cargarPosts() {
+    const container = document.getElementById("blog-grid");
+    if (!container) return;
 
-  window.filtrarDest = function(cat) {
-    filtro = cat;
-    renderFiltros();
-    renderGrid(cat === "todos" ? todos : todos.filter(d => d.categoria === cat));
-  };
+    try {
+      const posts = await window.getPosts(true); // Solo publicados
 
-  // ─── Grilla de cards ──────────────────────────────────────
-  function renderGrid(items) {
-    const el = document.getElementById("dest-grid");
-    if (!el) return;
-    if (!items.length) {
-      el.innerHTML = `
-        <div class="empty-state">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="64" height="64">
-            <path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 16l4.553 2.276A1 1 0 0021 24.382V8.618a1 1 0 00-.553-.894L15 5m0 18V5m0 0L9 7"/>
-          </svg>
-          <p>No hay destinos en esta categoría todavía.</p>
-        </div>`;
-      return;
-    }
-    el.innerHTML = `<div class="destinos-page-grid">${items.map(cardDestino).join("")}</div>`;
-  }
-
-  function cardDestino(d) {
-    const img = d.imagenes && d.imagenes[0] ? d.imagenes[0] : "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80";
-    const desc = d.descripcionCorta || (d.descripcion || "").slice(0, 90);
-    const precio = (d.precio || 0).toLocaleString("es-AR");
-    return `
-      <a class="destino-card-full" href="./ver-destino.html?id=${d.id}">
-        <div class="dcf-img">
-          <img src="${img}" alt="${d.nombre}" loading="lazy">
-          ${d.categoria ? `<span class="dcf-badge">${d.categoria}</span>` : ""}
-        </div>
-        <div class="dcf-body">
-          <div class="dcf-name">${d.nombre}</div>
-          <div class="dcf-desc">${desc}</div>
-          <div class="dcf-footer">
-            <span class="dcf-price">desde $${precio}</span>
-            <span class="dcf-btn">Ver destino →</span>
+      if (!posts || posts.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <p>No hay posts disponibles todavía.<br>¡Volvé pronto!</p>
           </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = posts.map(post => {
+        const fecha = new Date(post.fecha).toLocaleDateString('es-AR');
+        const imagen = post.imagen || "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=600&q=80";
+        const resumen = post.resumen || (post.contenido || "").slice(0, 150);
+
+        return `
+          <article class="blog-card">
+            <div class="blog-card-img">
+              <img src="${imagen}" alt="${post.titulo}" loading="lazy">
+            </div>
+            <div class="blog-card-body">
+              <div class="blog-card-meta">${fecha}</div>
+              <h3 class="blog-card-title">${post.titulo}</h3>
+              <p class="blog-card-desc">${resumen}...</p>
+              <a href="#" class="blog-card-link">Leer más →</a>
+            </div>
+          </article>
+        `;
+      }).join("");
+
+    } catch (error) {
+      console.error("Error cargando posts:", error);
+      container.innerHTML = `
+        <div class="error-state">
+          <p>Error cargando posts. Por favor, recarga la página.</p>
         </div>
-      </a>`;
+      `;
+    }
   }
 </script>
 </body>

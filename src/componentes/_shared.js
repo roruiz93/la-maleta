@@ -7,7 +7,7 @@ import { translations, langMeta } from "../i18n.js";
 
 // Estado interno
 let _remoteContent = {};
-let _currentLang   = localStorage.getItem("lm_lang") || "es";
+let _currentLang   = localStorage.getItem("web_lang") || "es";
 
 export function initShared() {
   // Año en footer
@@ -52,6 +52,7 @@ export function initShared() {
 
   // Lang switcher
   _buildLangSwitcher();
+  _applyLang(_currentLang);
 
   // Nav activo
   const page = location.pathname.split("/").pop();
@@ -63,7 +64,7 @@ export function initShared() {
   // Globales
   window.switchLang = c => {
     _currentLang = c;
-    localStorage.setItem("lm_lang", c);
+    localStorage.setItem("web_lang", c);
     document.documentElement.lang = c;
     _applyLang(c, true);
     _buildLangSwitcher();

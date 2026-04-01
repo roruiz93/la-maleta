@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Traducciones - La Maleta</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; max-width: 1200px; margin: 0 auto; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; border-radius: 8px; }
+        .lang-switcher button { margin: 5px; padding: 10px 15px; font-size: 14px; border: 1px solid #b8924a; background: white; cursor: pointer; border-radius: 5px; }
+        .lang-switcher button:hover { background: #f5f5f5; }
+        .lang-switcher button.active { background-color: #b8924a; color: white; }
+        .test-text { margin: 10px 0; padding: 8px; background: #f9f9f9; border-left: 4px solid #b8924a; }
+        .status { font-weight: bold; margin: 10px 0; }
+        .error { color: red; }
+        .success { color: green; }
+        .warning { color: orange; }
+        h1 { color: #b8924a; }
+        h2 { color: #333; border-bottom: 2px solid #b8924a; padding-bottom: 5px; }
+        .test-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .translation-test { background: white; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .original { font-weight: bold; color: #666; }
+        .translated { color: #333; margin-top: 5px; transition: opacity 0.3s; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Test del Sistema de Traducciones</h1>
+
+    <div class="test-section">
+        <h2>Control de Idioma</h2>
+        <div id="lang-switcher" class="lang-switcher"></div>
+        <p class="status">Idioma actual: <span id="current-lang">es</span></p>
+    </div>
+
+    <div class="test-section">
+        <h2>Pruebas de Navegación</h2>
+        <div class="test-grid">
+            <div class="translation-test">
+                <div class="original">Navegación 1:</div>
+                <div data-field="nav1" class="translated">Destinos</div>
+            </div>
+            <div class="translation-test">
+                <div class="original">Navegación 2:</div>
+                <div data-field="nav2" class="translated">Experiencias</div>
+            </div>
+            <div class="translation-test">
+                <div class="original">Navegación 3:</div>
+                <div data-field="nav3" class="translated">Nosotros</div>
+            </div>
+            <div class="translation-test">
+                <div class="original">CTA Nav:</div>
+                <div data-field="nav-cta" class="translated">Solicitá información</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Pruebas de Contenido Principal</h2>
+        <div class="test-grid">
+            <div class="translation-test">
+                <div class="original">Hero Title:</div>
+                <div data-field="hero-h1" class="translated">Organizamos los viajes<br>que siempre soñaste</div>
+            </div>
+            <div class="translation-test">
+                <div class="original">Hero Subtitle:</div>
+                <div data-field="hero-sub" class="translated">Descubrí destinos únicos con un trato cercano y personalizado</div>
+            </div>
+            <div class="translation-test">
+                <div class="original">Hero Button 1:</div>
+                <div data-field="hero-btn1" class="translated">Ver Destinos</div>
+            </div>
+            <div class="translation-test">
+                <div class="original">Hero Button 2:</div>
+                <div data-field="hero-btn2" class="translated">Sobre Nosotros</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Pruebas de Destinos</h2>
+        <div class="test-grid">
+            <div class="translation-test">
+                <div class="original">Título Destinos:</div>
+                <div data-field="dest-title" class="translated">Destinos Destacados</div>
+            </div>
+            <div class="translation-test">
+                <div class="original">Destino 1:</div>
+                <div data-field="d1-name" class="translated">Noruega</div>
+                <div data-field="d1-desc" class="translated">7 Días, desde $1200</div>
+            </div>
+            <div class="translation-test">
+                <div class="original">Destino 2:</div>
+                <div data-field="d2-name" class="translated">Japón</div>
+                <div data-field="d2-desc" class="translated">7 Días, desde $1200</div>
+            </div>
+            <div class="translation-test">
+                <div class="original">Ver Todos:</div>
+                <div data-field="ver-todos" class="translated">Ver Todos los Viajes  ›</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Pruebas de Sección "Por Qué Elegirnos"</h2>
+        <div class="test-grid">
+            <div class="translation-test">
+                <div class="original">Título:</div>
+                <div data-field="pq-title" class="translated">¿Por Qué Elegirnos?</div>
+            </div>
+            <div class="translation-test">
+                <div class="original">Razón 1:</div>
+                <div data-field="pq1" class="translated">Atención Personalizada</div>
+            </div>
+            <div class="translation-test">
+                <div class="original">Razón 2:</div>
+                <div data-field="pq2" class="translated">Viajes a tu Medida</div>
+            </div>
+            <div class="translation-test">
+                <div class="original">Razón 3:</div>
+                <div data-field="pq3" class="translated">Seguridad y Confianza</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Diagnóstico del Sistema</h2>
+        <div id="test-results">
+            <p class="status">Ejecutando pruebas automáticas...</p>
+        </div>
+    </div>
+
+    <script type="module">
+        import { translations, langMeta, getCurrentLang, setCurrentLang, t } from './src/i18n.js';
+
+        console.log('🧪 Iniciando test de traducciones...');
+
+        let currentLang = getCurrentLang();
+        let testResults = [];
+
+        // Test 1: Verificar que los archivos de traducción se cargaron
+        function testTranslationFiles() {
+            const langs = ['es', 'ca', 'en'];
+            const results = {};
+            let allLoaded = true;
+
+            langs.forEach(lang => {
+                if (translations[lang]) {
+                    const keyCount = Object.keys(translations[lang]).length;
+                    results[lang] = `✅ ${keyCount} claves`;
+                } else {
+                    results[lang] = '❌ NO ENCONTRADO';
+                    allLoaded = false;
+                }
+            });
+
+            testResults.push({
+                test: 'Archivos de traducción',
+                status: allLoaded ? 'success' : 'error',
+                message: `ES: ${results.es} | CA: ${results.ca} | EN: ${results.en}`
+            });
+        }
+
+        // Test 2: Verificar integridad de claves
+        function testTranslationKeys() {
+            const baseKeys = Object.keys(translations['es'] || {});
+            const langs = ['ca', 'en'];
+            const issues = [];
+
+            langs.forEach(lang => {
+                if (!translations[lang]) {
+                    issues.push(`${lang}: archivo faltante`);
+                    return;
+                }
+
+                const langKeys = Object.keys(translations[lang]);
+                const missing = baseKeys.filter(key => !langKeys.includes(key));
+                const extra = langKeys.filter(key => !baseKeys.includes(key));
+
+                if (missing.length > 0) {
+                    issues.push(`${lang}: faltan ${missing.length} claves`);
+                }
+                if (extra.length > 0) {
+                    issues.push(`${lang}: ${extra.length} claves extra`);
+                }
+            });
+
+            testResults.push({
+                test: 'Integridad de claves',
+                status: issues.length === 0 ? 'success' : 'warning',
+                message: issues.length === 0 ? 'Todas las claves coinciden' : issues.join(', ')
+            });
+        }
+
+        // Test 3: Verificar función de traducción
+        function testTranslationFunction() {
+            try {
+                const testCases = [
+                    { key: 'nav1', lang: 'en', expected: 'Destinations' },
+                    { key: 'nav1', lang: 'ca', expected: 'Destinacions' },
+                    { key: 'hero-h1', lang: 'en', contains: 'organize' }
+                ];
+
+                const failures = [];
+
+                testCases.forEach(testCase => {
+                    const result = t(testCase.key, testCase.lang);
+
+                    if (testCase.expected && result !== testCase.expected) {
+                        failures.push(`${testCase.lang}/${testCase.key}: esperado "${testCase.expected}", obtenido "${result}"`);
+                    }
+
+                    if (testCase.contains && !result.toLowerCase().includes(testCase.contains.toLowerCase())) {
+                        failures.push(`${testCase.lang}/${testCase.key}: debería contener "${testCase.contains}"`);
+                    }
+                });
+
+                testResults.push({
+                    test: 'Función de traducción',
+                    status: failures.length === 0 ? 'success' : 'error',
+                    message: failures.length === 0 ? 'Todas las pruebas pasaron' : failures.join(', ')
+                });
+
+            } catch (error) {
+                testResults.push({
+                    test: 'Función de traducción',
+                    status: 'error',
+                    message: `Error: ${error.message}`
+                });
+            }
+        }
+
+        // Test 4: Verificar metadatos de idiomas
+        function testLanguageMeta() {
+            const requiredLangs = ['es', 'ca', 'en'];
+            const missing = [];
+
+            requiredLangs.forEach(lang => {
+                if (!langMeta[lang] || !langMeta[lang].label || !langMeta[lang].flag) {
+                    missing.push(lang);
+                }
+            });
+
+            testResults.push({
+                test: 'Metadatos de idiomas',
+                status: missing.length === 0 ? 'success' : 'error',
+                message: missing.length === 0 ? 'Todos los metadatos están presentes' : `Metadatos faltantes: ${missing.join(', ')}`
+            });
+        }
+
+        // Construir selector de idioma
+        function buildLangSwitcher() {
+            const wrap = document.getElementById("lang-switcher");
+            if (!wrap) return;
+
+            wrap.innerHTML = Object.entries(langMeta).map(([code, meta]) => `
+                <button class="lang-btn ${code === currentLang ? "active" : ""}"
+                  onclick="switchLang('${code}')" title="${meta.label}">
+                  ${meta.flag} ${meta.label}
+                </button>`).join("");
+        }
+
+        // Cambiar idioma
+        window.switchLang = function(code) {
+            if (!translations[code]) {
+                console.warn(`Idioma ${code} no disponible`);
+                return;
+            }
+
+            currentLang = code;
+            setCurrentLang(code);
+            document.getElementById('current-lang').textContent = code;
+            applyLang(code, true);
+            buildLangSwitcher();
+
+            console.log(`✅ Cambiado a idioma: ${code}`);
+        };
+
+        // Aplicar traducciones
+        function applyLang(lang, animate = false) {
+            const trans = translations[lang] || translations["es"];
+
+            document.querySelectorAll("[data-field]").forEach((el) => {
+                const key = el.dataset.field;
+                if (trans[key] === undefined) {
+                    console.warn(`Clave '${key}' no encontrada para idioma '${lang}'`);
+                    return;
+                }
+
+                if (animate) {
+                    el.style.opacity = "0.5";
+                    setTimeout(() => {
+                        el.innerHTML = trans[key];
+                        el.style.opacity = "1";
+                    }, 150);
+                } else {
+                    el.innerHTML = trans[key];
+                }
+            });
+        }
+
+        // Mostrar resultados
+        function showResults() {
+            const container = document.getElementById('test-results');
+            const summary = testResults.filter(r => r.status === 'success').length;
+            const total = testResults.length;
+
+            const html = `
+                <h3>Resumen: ${summary}/${total} pruebas exitosas</h3>
+                ${testResults.map(result =>
+                    `<p class="status ${result.status}">
+                        ${result.status === 'success' ? '✅' : result.status === 'warning' ? '⚠️' : '❌'}
+                        <strong>${result.test}:</strong> ${result.message}
+                    </p>`
+                ).join('')}
+            `;
+            container.innerHTML = html;
+        }
+
+        // Ejecutar todos los tests
+        function runTests() {
+            console.log('📊 Ejecutando batería de tests...');
+            testResults = [];
+
+            testTranslationFiles();
+            testTranslationKeys();
+            testTranslationFunction();
+            testLanguageMeta();
+
+            showResults();
+
+            console.log('📊 Tests completados:', testResults);
+            console.log('🌐 Traducciones disponibles:', Object.keys(translations));
+            console.log('🗣️ Metadatos de idiomas:', langMeta);
+        }
+
+        // Inicializar cuando el DOM esté listo
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🚀 Inicializando test de traducciones...');
+
+            buildLangSwitcher();
+            applyLang(currentLang);
+            document.getElementById('current-lang').textContent = currentLang;
+
+            // Esperar un poco para que se carguen las traducciones
+            setTimeout(runTests, 100);
+        });
+
+        // Debug global para pruebas manuales
+        window.testTranslations = { translations, langMeta, t, getCurrentLang, setCurrentLang };
+    </script>
+</body>
+</html>

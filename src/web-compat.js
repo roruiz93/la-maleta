@@ -1,10 +1,5 @@
-// ============================================================
-//  la-maleta-web — Página pública
-//  Solo LECTURA de Firebase. Cero código de administración.
-// ============================================================
-
-import { listenContent, listenColors, listenDestinos, listenSettings } from "./firebase.js";
-import { translations, langMeta } from "./i18n.js";
+// web.js compatible - sin imports ES6
+(function() {
 
 // ─── Estado ───────────────────────────────────────────────
 let currentLang   = localStorage.getItem("web_lang") || "es";
@@ -24,15 +19,15 @@ window.addEventListener("DOMContentLoaded", () => {
 // ─── Listeners en tiempo real ─────────────────────────────
 function startListeners() {
   // Textos — merge i18n base + Firebase
-  listenContent((data) => {
+  window.listenContent((data) => {
     if (data) { remoteContent = data; applyLang(currentLang, false); }
   });
 
   // Colores desde site/colors (legacy)
-  listenColors((data) => applyColors(data));
+  window.listenColors((data) => applyColors(data));
 
   // Settings: colores (el admin los guarda acá), WhatsApp, footer
-  listenSettings((s) => {
+  window.listenSettings((s) => {
     applyColors(s);
     buildWhatsAppFloat(s.whatsapp, s.whatsappMsg);
     const footerMap = {
@@ -52,7 +47,7 @@ function startListeners() {
   });
 
   // Destinos: genera dinámicamente los destinos destacados desde Firebase
-  listenDestinos((items) => {
+  window.listenDestinos((items) => {
     _destinosIds = items.map(d => d.id);
     renderHomeDestinos(items);
   });
@@ -63,7 +58,7 @@ function buildLangSwitcher() {
   const wrap = document.getElementById("lang-switcher");
   if (!wrap) return;
 
-  wrap.innerHTML = Object.entries(langMeta).map(([code, meta]) => `
+  wrap.innerHTML = Object.entries(window.langMeta).map(([code, meta]) => `
     <button class="lang-btn ${code === currentLang ? "active" : ""}"
       onclick="switchLang('${code}')" title="${meta.label}">
       ${meta.flag} ${meta.label}
@@ -71,7 +66,7 @@ function buildLangSwitcher() {
 }
 
 window.switchLang = function(code) {
-  if (!translations[code]) return;
+  if (!window.translations[code]) return;
   currentLang = code;
   localStorage.setItem("web_lang", code);
   document.documentElement.lang = code;
@@ -89,7 +84,7 @@ window.toggleMenu = function() {
 };
 
 function applyLang(lang, animate) {
-  const base   = translations[lang] || translations["es"];
+  const base   = window.translations[lang] || window.translations["es"];
   const saved  = remoteContent[lang] || {};
   const merged = { ...base, ...saved };
   document.querySelectorAll("[data-field]").forEach((el) => {
@@ -212,3 +207,5 @@ function updateCustomImages(settings) {
     });
   }
 }
+
+})();
