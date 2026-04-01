@@ -64,7 +64,7 @@
 </div>
 
 <div class="page-wrap">
-  <div id="exp-grid">
+  <div id="exp-grid" class="exp-grid">
     <div class="loading"><div class="spinner"></div><span data-field="loading-experiencias">Cargando experiencias...</span></div>
   </div>
 </div>
@@ -77,15 +77,15 @@
     </div>
     <div class="footer-links">
       <div class="fl-col">
-        <div class="fl-title">Páginas</div>
-        <a href="./destinos.html">Destinos</a>
-        <a href="./informacion.html">Experiencias</a>
-        <a href="./nosotros.html">Nosotros</a>
-        <a href="./blog.html">Blog</a>
-        <a href="./contacto.html">Contacto</a>
+        <div class="fl-title" data-field="footer-pages-title">Páginas</div>
+        <a href="./destinos.html" data-field="nav1">Destinos</a>
+        <a href="./informacion.html" data-field="nav2">Experiencias</a>
+        <a href="./nosotros.html" data-field="nav3">Nosotros</a>
+        <a href="./blog.html" data-field="nav4">Blog</a>
+        <a href="./contacto.html" data-field="nav5">Contacto</a>
       </div>
       <div class="fl-col">
-        <div class="fl-title">Contacto</div>
+        <div class="fl-title" data-field="footer-contact-title">Contacto</div>
         <span id="footer-tel"   data-field="f-tel">+54 9 11 0000-0000</span>
         <span id="footer-email" data-field="f-email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="deb7b0b8b19eb2bfb3bfb2bbaabff0bdb1b3">[email&#160;protected]</a></span>
         <span id="footer-addr"  data-field="f-addr">Buenos Aires, Argentina</span>
@@ -111,7 +111,7 @@
   window.addEventListener("DOMContentLoaded", async () => {
     await waitForDependencies();
     initShared();
-    await cargarExperiencias();
+    iniciarListenerExperiencias();
   });
 
   function waitForDependencies() {
@@ -154,6 +154,7 @@
       document.documentElement.lang = c;
       applyLang(c, true);
       buildLangSwitcher();
+      window.renderExperiencias();
     };
     window.toggleMenu = () => document.getElementById("mobile-menu")?.classList.toggle("open");
   }
@@ -211,65 +212,49 @@
     });
   }
 
-  async function cargarExperiencias() {
+  let _expActivas = [];
+
+  function iniciarListenerExperiencias() {
+    window.listenExperiencias(items => {
+      _expActivas = items.filter(exp => exp.activo !== false);
+      renderExperiencias();
+    });
+  }
+
+  window.renderExperiencias = function renderExperiencias() {
     const container = document.getElementById("exp-grid");
     if (!container) return;
 
-    try {
-      // Obtener experiencias desde Firebase
-      const experiencias = await window.getExperiencias();
+    if (!_expActivas.length) {
+      container.innerHTML = `<div class="empty-state"><p>${window.t('exp-empty')}</p></div>`;
+      return;
+    }
 
-      // Si no hay experiencias, mostrar mensaje
-      if (!experiencias || experiencias.length === 0) {
-        container.innerHTML = `
-          <div class="empty-state">
-            <p>No hay experiencias disponibles todavía.<br>¡Volvé pronto!</p>
+    const lang = window.getCurrentLang();
+    const ml = (field) => {
+      if (!field) return '';
+      return typeof field === 'object' ? (field[lang] || field.es || '') : field;
+    };
+
+    container.innerHTML = _expActivas.map(exp => {
+      const imagen = exp.imagen || "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80";
+      const categoria = exp.categoria || window.t('exp-categoria-default');
+
+      return `
+        <div class="exp-card">
+          <div class="exp-img">
+            <img src="${imagen}" alt="${ml(exp.nombre)}" onerror="this.src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80'">
           </div>
-        `;
-        return;
-      }
-
-      // Filtrar solo experiencias activas
-      const activas = experiencias.filter(exp => exp.activo !== false);
-
-      if (activas.length === 0) {
-        container.innerHTML = `
-          <div class="empty-state">
-            <p>No hay experiencias disponibles todavía.<br>¡Volvé pronto!</p>
+          <div class="exp-body">
+            <span class="exp-tag">${categoria}</span>
+            <div class="exp-name">${ml(exp.nombre)}</div>
+            <p class="exp-desc">${ml(exp.descripcion)}</p>
+            <button class="exp-btn">${window.t('exp-solicitar')}</button>
           </div>
-        `;
-        return;
-      }
-
-      // Generar HTML para cada experiencia
-      container.innerHTML = activas.map(exp => {
-        const imagen = exp.imagen || "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80";
-        const categoria = exp.categoria || "Experiencia";
-
-        return `
-          <div class="exp-card">
-            <div class="exp-card-img">
-              <img src="${imagen}" alt="${exp.nombre}" onerror="this.src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80'">
-              <div class="exp-card-cat">${categoria}</div>
-            </div>
-            <div class="exp-card-body">
-              <h3 class="exp-card-title">${exp.nombre}</h3>
-              <p class="exp-card-desc">${exp.descripcion || ""}</p>
-              <button class="btn-outline">Solicitar información</button>
-            </div>
-          </div>
-        `;
-      }).join("");
-
-    } catch (error) {
-      console.error("Error cargando experiencias:", error);
-      container.innerHTML = `
-        <div class="error-state">
-          <p>Error cargando experiencias. Por favor, recarga la página.</p>
         </div>
       `;
-    }
-  }
+    }).join("");
+  };
 </script>
 </body>
 </html>

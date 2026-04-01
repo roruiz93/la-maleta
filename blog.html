@@ -64,7 +64,7 @@
 </div>
 
 <div class="page-wrap">
-  <div id="blog-grid">
+  <div id="blog-grid" class="blog-grid">
     <div class="loading"><div class="spinner"></div>Cargando posts...</div>
   </div>
 </div>
@@ -77,15 +77,15 @@
     </div>
     <div class="footer-links">
       <div class="fl-col">
-        <div class="fl-title">Páginas</div>
-        <a href="./destinos.html">Destinos</a>
-        <a href="./informacion.html">Experiencias</a>
-        <a href="./nosotros.html">Nosotros</a>
-        <a href="./blog.html">Blog</a>
-        <a href="./contacto.html">Contacto</a>
+        <div class="fl-title" data-field="footer-pages-title">Páginas</div>
+        <a href="./destinos.html" data-field="nav1">Destinos</a>
+        <a href="./informacion.html" data-field="nav2">Experiencias</a>
+        <a href="./nosotros.html" data-field="nav3">Nosotros</a>
+        <a href="./blog.html" data-field="nav4">Blog</a>
+        <a href="./contacto.html" data-field="nav5">Contacto</a>
       </div>
       <div class="fl-col">
-        <div class="fl-title">Contacto</div>
+        <div class="fl-title" data-field="footer-contact-title">Contacto</div>
         <span id="footer-tel"   data-field="f-tel">+54 9 11 0000-0000</span>
         <span id="footer-email" data-field="f-email">info@lamaleta.com</span>
         <span id="footer-addr"  data-field="f-addr">Buenos Aires, Argentina</span>
@@ -111,7 +111,7 @@
   window.addEventListener("DOMContentLoaded", async () => {
     await waitForDependencies();
     initShared();
-    await cargarPosts();
+    iniciarListenerPosts();
   });
 
   function waitForDependencies() {
@@ -154,6 +154,7 @@
       document.documentElement.lang = c;
       applyLang(c, true);
       buildLangSwitcher();
+      window.renderPosts();
     };
     window.toggleMenu = () => document.getElementById("mobile-menu")?.classList.toggle("open");
   }
@@ -211,51 +212,49 @@
     });
   }
 
-  async function cargarPosts() {
+  let _posts = [];
+
+  function iniciarListenerPosts() {
+    window.listenPosts(items => {
+      _posts = items;
+      renderPosts();
+    });
+  }
+
+  window.renderPosts = function renderPosts() {
     const container = document.getElementById("blog-grid");
     if (!container) return;
 
-    try {
-      const posts = await window.getPosts(true); // Solo publicados
-
-      if (!posts || posts.length === 0) {
-        container.innerHTML = `
-          <div class="empty-state">
-            <p>No hay posts disponibles todavía.<br>¡Volvé pronto!</p>
-          </div>
-        `;
-        return;
-      }
-
-      container.innerHTML = posts.map(post => {
-        const fecha = new Date(post.fecha).toLocaleDateString('es-AR');
-        const imagen = post.imagen || "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=600&q=80";
-        const resumen = post.resumen || (post.contenido || "").slice(0, 150);
-
-        return `
-          <article class="blog-card">
-            <div class="blog-card-img">
-              <img src="${imagen}" alt="${post.titulo}" loading="lazy">
-            </div>
-            <div class="blog-card-body">
-              <div class="blog-card-meta">${fecha}</div>
-              <h3 class="blog-card-title">${post.titulo}</h3>
-              <p class="blog-card-desc">${resumen}...</p>
-              <a href="#" class="blog-card-link">Leer más →</a>
-            </div>
-          </article>
-        `;
-      }).join("");
-
-    } catch (error) {
-      console.error("Error cargando posts:", error);
-      container.innerHTML = `
-        <div class="error-state">
-          <p>Error cargando posts. Por favor, recarga la página.</p>
-        </div>
-      `;
+    if (!_posts.length) {
+      container.innerHTML = `<div class="empty-state"><p>${window.t('blog-empty')}</p></div>`;
+      return;
     }
-  }
+
+    const lang = window.getCurrentLang();
+    container.innerHTML = _posts.map(post => {
+      const fecha = new Date(post.fecha).toLocaleDateString(lang === 'en' ? 'en-US' : 'es-AR');
+      const imagen = post.imagen || "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=600&q=80";
+      const resumen = post.resumen || (post.contenido || "").slice(0, 150);
+
+      return `
+        <article class="blog-card">
+          <div class="blog-img">
+            <img src="${imagen}" alt="${post.titulo}" loading="lazy">
+          </div>
+          <div class="blog-body">
+            ${post.categoria ? `<span class="blog-cat">${post.categoria}</span>` : ''}
+            <div class="blog-title">${post.titulo}</div>
+            <p class="blog-excerpt">${resumen}...</p>
+            <div class="blog-meta">
+              <span>${fecha}</span>
+              ${post.autor ? `<span>${post.autor}</span>` : ''}
+              <a href="#" style="color:var(--gold);font-weight:700;margin-left:auto">${window.t('blog-read-more')}</a>
+            </div>
+          </div>
+        </article>
+      `;
+    }).join("");
+  };
 </script>
 </body>
 </html>

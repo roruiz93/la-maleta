@@ -601,6 +601,28 @@ footer { background:var(--primary); color:rgba(255,255,255,.55); padding:52px 48
 /* Estilo extra para exp-grid-wrap (informacion) */
 .exp-grid-wrap { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:28px; }
 
+/* ─── CARRUSEL VER-DESTINO ─── */
+.vd-carousel { position:relative; height:480px; overflow:hidden; background:#111; }
+.vd-carousel-track { display:flex; height:100%; transition:transform .45s ease; }
+.vd-carousel-slide { min-width:100%; height:100%; flex-shrink:0; }
+.vd-carousel-slide img { width:100%; height:100%; object-fit:cover; display:block; }
+.vd-carousel-btn {
+  position:absolute; top:50%; transform:translateY(-50%);
+  background:rgba(0,0,0,.45); color:#fff; border:none;
+  width:46px; height:46px; border-radius:50%; font-size:26px;
+  cursor:pointer; z-index:10; transition:.2s; line-height:1;
+  display:flex; align-items:center; justify-content:center;
+  backdrop-filter:blur(4px);
+}
+.vd-carousel-btn:hover { background:rgba(0,0,0,.75); }
+.vd-carousel-btn.prev { left:18px; }
+.vd-carousel-btn.next { right:18px; }
+.vd-carousel-dots { position:absolute; bottom:80px; left:50%; transform:translateX(-50%); display:flex; gap:8px; z-index:10; }
+.vd-dot { width:9px; height:9px; border-radius:50%; background:rgba(255,255,255,.45); cursor:pointer; transition:.25s; border:none; padding:0; }
+.vd-dot.active { background:#fff; transform:scale(1.2); }
+@media(max-width:960px) { .vd-carousel { height:320px; } .vd-carousel-dots { bottom:64px; } }
+@media(max-width:560px) { .vd-carousel { height:240px; } }
+
 /* dcf-duracion badge en card */
 .dcf-duracion {
   position:absolute; bottom:12px; right:12px;

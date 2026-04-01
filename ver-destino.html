@@ -20,21 +20,23 @@
     <div class="logo-txt"><span class="v">Viajes</span><span class="n">La Maleta</span></div>
   </a>
   <nav>
-    <a href="./destinos.html" class="nav-active">Destinos</a>
-    <a href="./informacion.html">Experiencias</a>
-    <a href="./nosotros.html">Nosotros</a>
-    <a href="./contacto.html">Contacto</a>
-    <a href="./contacto.html" class="nav-cta">Solicitá info</a>
+    <a href="./destinos.html" class="nav-active" data-field="nav1">Destinos</a>
+    <a href="./informacion.html" data-field="nav2">Experiencias</a>
+    <a href="./nosotros.html" data-field="nav3">Nosotros</a>
+    <a href="./blog.html" data-field="nav4">Blog</a>
+    <a href="./contacto.html" data-field="nav5">Contacto</a>
+    <a href="./contacto.html" class="nav-cta" data-field="nav-cta">Solicitá info</a>
   </nav>
   <div id="lang-switcher" class="lang-switcher"></div>
   <button class="hamburger" onclick="toggleMenu()" aria-label="Menú"><span></span><span></span><span></span></button>
 </header>
 <div class="mobile-menu" id="mobile-menu">
-  <a href="./destinos.html">Destinos</a>
-  <a href="./informacion.html">Experiencias</a>
-  <a href="./nosotros.html">Nosotros</a>
-  <a href="./contacto.html">Contacto</a>
-  <a href="./contacto.html" class="nav-cta">Solicitá info</a>
+  <a href="./destinos.html" data-field="nav1">Destinos</a>
+  <a href="./informacion.html" data-field="nav2">Experiencias</a>
+  <a href="./nosotros.html" data-field="nav3">Nosotros</a>
+  <a href="./blog.html" data-field="nav4">Blog</a>
+  <a href="./contacto.html" data-field="nav5">Contacto</a>
+  <a href="./contacto.html" class="nav-cta" data-field="nav-cta">Solicitá info</a>
 </div>
 
 <!-- BREADCRUMB -->
@@ -65,18 +67,19 @@
     </div>
     <div class="footer-links">
       <div class="fl-col">
-        <div class="fl-title">Páginas</div>
-        <a href="./destinos.html">Destinos</a>
-        <a href="./informacion.html">Experiencias</a>
-        <a href="./nosotros.html">Nosotros</a>
-        <a href="./contacto.html">Contacto</a>
+        <div class="fl-title" data-field="footer-pages-title">Páginas</div>
+        <a href="./destinos.html" data-field="nav1">Destinos</a>
+        <a href="./informacion.html" data-field="nav2">Experiencias</a>
+        <a href="./nosotros.html" data-field="nav3">Nosotros</a>
+        <a href="./blog.html" data-field="nav4">Blog</a>
+        <a href="./contacto.html" data-field="nav5">Contacto</a>
       </div>
       <div class="fl-col">
-        <div class="fl-title">Contacto</div>
-        <span id="footer-tel">+54 9 11 0000-0000</span>
-        <span id="footer-email">info@lamaleta.com</span>
-        <span id="footer-addr">Buenos Aires, Argentina</span>
-        <span id="footer-hours">Lun–Vie 9:00–18:00</span>
+        <div class="fl-title" data-field="footer-contact-title">Contacto</div>
+        <span id="footer-tel" data-field="f-tel">+54 9 11 0000-0000</span>
+        <span id="footer-email" data-field="f-email">info@lamaleta.com</span>
+        <span id="footer-addr" data-field="f-addr">Buenos Aires, Argentina</span>
+        <span id="footer-hours" data-field="f-hours">Lun–Vie 9:00–18:00</span>
       </div>
     </div>
   </div>
@@ -139,6 +142,7 @@
       document.documentElement.lang = c;
       applyLang(c, true);
       buildLangSwitcher();
+      if (_vdDestino && _vdWrap) renderDestino(_vdDestino, _vdWrap, _vdNum, _vdMsg);
     };
     window.toggleMenu = () => document.getElementById("mobile-menu")?.classList.toggle("open");
   }
@@ -196,69 +200,134 @@
     });
   }
 
+  let _vdDestino = null, _vdWrap = null, _vdNum = "5491100000000", _vdMsg = "";
+
   async function initVerDestino() {
     const id = new URLSearchParams(location.search).get("id");
     if (!id) { location.href = "./destinos.html"; return; }
 
     const wrap = document.getElementById("ver-destino-contenido");
     if (!wrap) return;
+    _vdWrap = wrap;
 
-    wrap.innerHTML = `<div class="loading" style="padding:120px 0"><div class="spinner"></div>Cargando destino...</div>`;
+    wrap.innerHTML = `<div class="loading" style="padding:120px 0"><div class="spinner"></div><span data-field="loading-destino">Cargando destino...</span></div>`;
+    applyLang(window.getCurrentLang());
 
     const d = await window.getDestino(id);
     if (!d || d.activo === false) { location.href = "./destinos.html"; return; }
 
+    _vdDestino = d;
     document.title = `${d.nombre} — Viajes La Maleta`;
 
     const bc = document.getElementById("bc-nombre");
     if (bc) bc.textContent = d.nombre;
 
     window.listenSettings(s => {
-      const num = s.whatsapp || "5491100000000";
-      const msg = `Hola, quiero información sobre el viaje a ${d.nombre}`;
-      renderDestino(d, wrap, num, msg);
+      _vdNum = s.whatsapp || "5491100000000";
+      _vdMsg = `Hola, quiero información sobre el viaje a ${d.nombre}`;
+      renderDestino(d, wrap, _vdNum, _vdMsg);
     });
   }
 
+  const WA_SVG = `<svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>`;
+
+  window._vdIdx = 0;
+
+  window.vdGoTo = function(idx) {
+    const imagenes = _vdDestino?.imagenes || [];
+    window._vdIdx = (idx + imagenes.length) % imagenes.length;
+    const track = document.getElementById('vd-track');
+    if (track) track.style.transform = `translateX(-${window._vdIdx * 100}%)`;
+    document.querySelectorAll('.vd-dot').forEach((dot, i) =>
+      dot.classList.toggle('active', i === window._vdIdx)
+    );
+  };
+
+  window.vdCarousel = function(dir) { window.vdGoTo(window._vdIdx + dir); };
+
   function renderDestino(d, wrap, num, msg) {
-    const img = d.imagenes && d.imagenes[0] ? d.imagenes[0] : "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80";
+    const imagenes = d.imagenes && d.imagenes.length
+      ? d.imagenes
+      : ["https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80"];
     const precio = (d.precio || 0).toLocaleString("es-AR");
-    const incluye = d.incluye && d.incluye.length ? d.incluye.map(i => `<li>${i}</li>`).join("") : "<li>Información a consultar</li>";
+    const incluye = d.incluye && d.incluye.length
+      ? d.incluye.map(i => `<li>${i}</li>`).join("")
+      : `<li>${window.t('vd-info-consultar')}</li>`;
     const whatsappUrl = `https://wa.me/${num}?text=${encodeURIComponent(msg)}`;
+    window._vdIdx = 0;
+
+    const heroInfo = `
+      <div class="vd-hero-ov"></div>
+      <div class="vd-hero-info">
+        <span class="vd-tag">${d.categoria || window.t('breadcrumb-destino')}</span>
+        <h1>${d.nombre}</h1>
+        <div class="vd-meta">
+          <span>💰 desde $${precio}</span>
+          ${d.duracion ? `<span>📅 ${d.duracion}</span>` : ''}
+        </div>
+      </div>`;
+
+    const heroHtml = imagenes.length > 1 ? `
+      <div class="vd-carousel">
+        <div class="vd-carousel-track" id="vd-track">
+          ${imagenes.map(img => `
+            <div class="vd-carousel-slide">
+              <img src="${img}" alt="${d.nombre}" onerror="this.src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80'">
+            </div>`).join('')}
+        </div>
+        <button class="vd-carousel-btn prev" onclick="vdCarousel(-1)">&#8249;</button>
+        <button class="vd-carousel-btn next" onclick="vdCarousel(1)">&#8250;</button>
+        <div class="vd-carousel-dots">
+          ${imagenes.map((_, i) => `<button class="vd-dot ${i===0?'active':''}" onclick="vdGoTo(${i})"></button>`).join('')}
+        </div>
+        ${heroInfo}
+      </div>` : `
+      <div class="vd-hero">
+        <img src="${imagenes[0]}" alt="${d.nombre}">
+        ${heroInfo}
+      </div>`;
+
+    const galeriaHtml = imagenes.length > 1 ? `
+      <div class="vd-section">
+        <h2>Galería</h2>
+        <div class="vd-galeria">
+          ${imagenes.map((img, i) => `
+            <img src="${img}" alt="${d.nombre} ${i+1}" loading="lazy"
+              onclick="vdGoTo(${i}); window.scrollTo({top:0,behavior:'smooth'})"
+              onerror="this.src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80'">
+          `).join('')}
+        </div>
+      </div>` : '';
 
     wrap.innerHTML = `
-      <div class="vd-hero">
-        <div class="vd-hero-img">
-          <img src="${img}" alt="${d.nombre}">
-        </div>
-        <div class="vd-hero-content">
-          <div class="vd-category">${d.categoria || "Destino"}</div>
-          <h1 class="vd-title">${d.nombre}</h1>
-          <div class="vd-price">desde $${precio}</div>
-          <div class="vd-duration">${d.duracion || "Duración a consultar"}</div>
-        </div>
-      </div>
-
-      <div class="vd-content">
-        <div class="vd-section">
-          <h2>Descripción</h2>
-          <p>${d.descripcion || d.descripcionCorta || "Descripción no disponible."}</p>
-        </div>
-
-        <div class="vd-section">
-          <h2>¿Qué incluye?</h2>
-          <ul class="vd-includes">${incluye}</ul>
-        </div>
-
-        <div class="vd-cta">
-          <h3>¿Te interesa este destino?</h3>
-          <p>Contactanos para más información y reservas</p>
-          <a href="${whatsappUrl}" target="_blank" class="btn-gold">
-            <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
-              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-            </svg>
-            Contactar por WhatsApp
-          </a>
+      ${heroHtml}
+      <div class="sw">
+        <div class="vd-layout">
+          <div>
+            <div class="vd-section">
+              <h2>${window.t('vd-descripcion')}</h2>
+              <p>${d.descripcion || d.descripcionCorta || window.t('vd-desc-default')}</p>
+            </div>
+            <div class="vd-section">
+              <h2>${window.t('vd-incluye')}</h2>
+              <ul class="vd-includes">${incluye}</ul>
+            </div>
+            ${galeriaHtml}
+          </div>
+          <div class="vd-sidebar">
+            <div class="vd-reserve-box">
+              <div class="vd-rb-precio">$${precio}</div>
+              <div class="vd-rb-sub">${window.t('vd-precio-persona') || 'precio por persona'}</div>
+              <a href="${whatsappUrl}" target="_blank" class="vd-rb-wa">
+                ${WA_SVG} ${window.t('vd-whatsapp-btn')}
+              </a>
+              <div class="vd-rb-detalles">
+                ${d.duracion ? `<div class="vd-rb-row"><span>📅</span><span>${d.duracion}</span></div>` : ''}
+                ${d.categoria ? `<div class="vd-rb-row"><span>🏷</span><span>${d.categoria}</span></div>` : ''}
+                ${d.incluye && d.incluye.length ? `<div class="vd-rb-row"><span>✓</span><span>${d.incluye.length} ${window.t('vd-incluidos') || 'incluidos'}</span></div>` : ''}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     `;

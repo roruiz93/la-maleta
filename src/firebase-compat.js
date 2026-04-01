@@ -115,7 +115,10 @@ window.getPosts = async function(soloPublicados = true) {
 
 window.listenPosts = function(callback) {
   return db.collection("posts").onSnapshot(snap => {
-    callback(snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(p => p.publicado));
+    const items = snap.docs.map(d => ({ id: d.id, ...d.data() }))
+      .filter(p => p.publicado)
+      .sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+    callback(items);
   });
 };
 
