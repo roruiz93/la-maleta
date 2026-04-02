@@ -18,6 +18,7 @@
 </script>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="./src/style.css">
+<script>try{var _wc=JSON.parse(localStorage.getItem('web_colors')||'null');if(_wc)Object.entries(_wc).forEach(function(e){document.documentElement.style.setProperty(e[0],e[1]);});}catch(e){}</script>
 </head>
 <body>
 
@@ -141,6 +142,8 @@
       applyColors(s);
       buildWhatsAppFloat(s.whatsapp, s.whatsappMsg);
       updateFooter(s);
+      updateLogo(s);
+      if (s.defaultLang && !localStorage.getItem('web_lang')) window.switchLang(s.defaultLang);
     });
 
     // Contenido
@@ -186,7 +189,11 @@
   function applyColors(data) {
     if (!data) return;
     const map = { gold: "--gold", bg: "--bg", text: "--text", primary: "--primary", cardBg: "--card-bg" };
-    Object.entries(map).forEach(([k, v]) => { if (data[k]) document.documentElement.style.setProperty(v, data[k]); });
+    const cached = {};
+    Object.entries(map).forEach(([k, v]) => {
+      if (data[k]) { document.documentElement.style.setProperty(v, data[k]); cached[v] = data[k]; }
+    });
+    if (Object.keys(cached).length) localStorage.setItem('web_colors', JSON.stringify(cached));
   }
 
   function buildWhatsAppFloat(numero, mensaje) {
@@ -209,6 +216,17 @@
       if (!val) return;
       const el = document.getElementById(id);
       if (el) el.textContent = val;
+    });
+  }
+
+  function updateLogo(s) {
+    if (!s.logoUrl) return;
+    document.querySelectorAll('.logo-txt .n, .footer-name').forEach(el => {
+      el.innerHTML = `<img src="${s.logoUrl}" alt="La Maleta" style="height:24px; vertical-align:middle;">`;
+    });
+    document.querySelectorAll('.logo-wrap, .footer-brand').forEach(wrap => {
+      const svg = wrap.querySelector('svg');
+      if (svg) svg.style.display = 'none';
     });
   }
 
