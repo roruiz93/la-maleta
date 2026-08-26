@@ -7,6 +7,7 @@ service cloud.firestore {
       return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role;
     }
     function isSuperAdmin() { return isLoggedIn() && myRole() == 'superadmin'; }
+    function isAdmin() { return isLoggedIn() && myRole() == 'admin'; }
     function isEditor() { return isLoggedIn() && myRole() in ['superadmin','admin','editor']; }
 
     // Sitio (textos, colores, imágenes, settings)
@@ -33,9 +34,11 @@ service cloud.firestore {
     // Usuarios
     match /users/{uid} {
       allow read:   if isLoggedIn();
-      allow create: if isSuperAdmin()
-        && request.resource.data.keys().hasOnly(['email','name','role','createdAt'])
-        && request.resource.data.role in ['editor','admin','superadmin'];
+      allow create: if request.resource.data.keys().hasOnly(['email','name','role','createdAt'])
+        && (
+          (isSuperAdmin() && request.resource.data.role in ['editor','admin','superadmin'])
+          || (isAdmin() && request.resource.data.role == 'editor')
+        );
       allow delete: if isSuperAdmin() && uid != request.auth.uid;
       allow update: if false;
     }
