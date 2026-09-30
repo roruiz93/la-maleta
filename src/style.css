@@ -646,3 +646,7 @@ footer { background:var(--primary); color:rgba(255,255,255,.55); padding:52px 48
   padding:4px 10px; border-radius:3px; font-size:11px;
   backdrop-filter:blur(4px);
 }
+
+/* ─── Logo del sitio (Configuración → Logo) ─── */
+.site-logo-img { height: 44px; width: auto; max-width: 200px; object-fit: contain; display: block; }
+.site-logo-footer { height: 40px; margin-bottom: 8px; }

@@ -354,21 +354,8 @@
       }
     }
 
-    // Actualizar logo si hay uno personalizado
-    if (settings.logoUrl) {
-      const logoElements = document.querySelectorAll('.logo-txt .n, .footer-name');
-      logoElements.forEach(logoEl => {
-        logoEl.innerHTML = `<img src="${settings.logoUrl}" alt="La Maleta" style="height:24px; vertical-align:middle;">`;
-      });
-
-      const logoWraps = document.querySelectorAll('.logo-wrap, .footer-brand');
-      logoWraps.forEach(wrap => {
-        const svg = wrap.querySelector('svg');
-        if (svg) {
-          svg.style.display = 'none';
-        }
-      });
-    }
+    // Logo personalizado (o texto si no hay)
+    window.applySiteLogo(settings.logoUrl);
   }
 </script>
 </body>

@@ -258,6 +258,45 @@ window.getTexts = function(lang) {
   return { ...base, ...editados };
 };
 
+// ── Logo del sitio (Configuración → Logo) ─────────────────
+// La imagen va en un <img> propio dentro del encabezado y del pie: el texto
+// ("Viajes La Maleta", editable con data-field="logo") queda oculto mientras
+// haya logo, así applyLang() puede seguir actualizándolo sin pisar la imagen.
+// Se recuerda en el navegador para mostrarlo sin esperar a Firestore.
+window.applySiteLogo = function(url) {
+  const valido = typeof url === 'string' && /^https:\/\//.test(url);
+  try {
+    if (valido) localStorage.setItem('web_logo', url);
+    else localStorage.removeItem('web_logo');
+  } catch (e) {}
+  const lugares = [
+    { wrap: '.logo-wrap', texto: '.logo-txt', clase: 'site-logo-img' },
+    { wrap: '.footer-brand', texto: '.footer-name', clase: 'site-logo-img site-logo-footer' },
+  ];
+  lugares.forEach(({ wrap, texto, clase }) => {
+    document.querySelectorAll(wrap).forEach(w => {
+      let img = w.querySelector('img.site-logo-img');
+      if (valido && !img) {
+        img = document.createElement('img');
+        img.className = clase;
+        img.alt = 'Viajes La Maleta';
+        w.prepend(img);
+      }
+      if (img) {
+        if (valido) img.src = url; else img.remove();
+      }
+      w.querySelectorAll(texto + ', svg').forEach(el => { el.style.display = valido ? 'none' : ''; });
+    });
+  });
+};
+
+// Mostrar el último logo conocido apenas carga la página
+document.addEventListener && document.addEventListener('DOMContentLoaded', () => {
+  let guardado = null;
+  try { guardado = localStorage.getItem('web_logo'); } catch (e) {}
+  if (guardado) window.applySiteLogo(guardado);
+});
+
 // ── Vista previa desde el admin ──────────────────────────
 // El admin abre la página con ?preview=1 dentro de un iframe y le manda por
 // postMessage los textos sin guardar. Solo se muestran en ese iframe: no se

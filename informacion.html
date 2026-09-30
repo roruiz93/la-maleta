@@ -32,7 +32,7 @@
     </svg>
     <div class="logo-txt">
       <span class="v">Viajes</span>
-      <span class="n">La Maleta</span>
+      <span class="n" data-field="logo">La Maleta</span>
     </div>
   </a>
   <nav>
@@ -227,14 +227,7 @@
   }
 
   function updateLogo(s) {
-    if (!s.logoUrl) return;
-    document.querySelectorAll('.logo-txt .n, .footer-name').forEach(el => {
-      el.innerHTML = `<img src="${s.logoUrl}" alt="La Maleta" style="height:24px; vertical-align:middle;">`;
-    });
-    document.querySelectorAll('.logo-wrap, .footer-brand').forEach(wrap => {
-      const svg = wrap.querySelector('svg');
-      if (svg) svg.style.display = 'none';
-    });
+    window.applySiteLogo(s.logoUrl);
   }
 
   let _expActivas = [];
