@@ -258,6 +258,24 @@ window.getTexts = function(lang) {
   return { ...base, ...editados };
 };
 
+// ── WhatsApp ──────────────────────────────────────────────
+// wa.me necesita el número internacional solo con dígitos (ej. 34606715917).
+// Un número español cargado sin prefijo (9 dígitos) se completa con el 34.
+window.waNumero = function(raw) {
+  let d = String(raw || '').replace(/\D/g, '');
+  if (d.startsWith('00')) d = d.slice(2);
+  if (d.length === 9 && /^[6-9]/.test(d)) d = '34' + d;
+  return d.length >= 8 ? d : '';
+};
+
+// Devuelve el enlace o null si no hay número configurado (así no se muestran
+// botones que llevan a un número inexistente).
+window.waUrl = function(numero, mensaje) {
+  const n = window.waNumero(numero);
+  if (!n) return null;
+  return `https://wa.me/${n}` + (mensaje ? `?text=${encodeURIComponent(mensaje)}` : '');
+};
+
 // ── Logo del sitio (Configuración → Logo) ─────────────────
 // La imagen va en un <img> propio dentro del encabezado y del pie: el texto
 // ("Viajes La Maleta", editable con data-field="logo") queda oculto mientras

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Destino — Viajes La Maleta</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="./src/style.css?v=202609300539">
+<link rel="stylesheet" href="./src/style.css?v=202609300541">
 <script>try{var _wc=JSON.parse(localStorage.getItem('web_colors')||'null');if(_wc)Object.entries(_wc).forEach(function(e){document.documentElement.style.setProperty(e[0],e[1]);});}catch(e){}</script>
 </head>
 <body>
@@ -93,9 +93,9 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
 <!-- Scripts locales sin imports -->
-<script src="./src/firebase-config.js?v=202609300539"></script>
-<script src="./src/firebase-compat.js?v=202609300539"></script>
-<script src="./src/i18n-compat.js?v=202609300539"></script>
+<script src="./src/firebase-config.js?v=202609300541"></script>
+<script src="./src/firebase-compat.js?v=202609300541"></script>
+<script src="./src/i18n-compat.js?v=202609300541"></script>
 
 <script>
   window.addEventListener("DOMContentLoaded", async () => {
@@ -186,10 +186,10 @@
   }
 
   function buildWhatsAppFloat(numero, mensaje) {
-    const num = numero || "5491100000000";
-    const msg = mensaje || "Hola, quiero información sobre un viaje";
-    const url = `https://wa.me/${num}?text=${encodeURIComponent(msg)}`;
+    const url = window.waUrl(numero, mensaje || "Hola, quiero información sobre un viaje");
     let btn = document.getElementById("wa-float");
+    // Sin número configurado no se muestra el botón
+    if (!url) { btn?.remove(); return; }
     if (!btn) {
       btn = document.createElement("a");
       btn.id = "wa-float"; btn.target = "_blank"; btn.rel = "noopener";
@@ -212,7 +212,7 @@
     window.applySiteLogo(s.logoUrl);
   }
 
-  let _vdDestino = null, _vdWrap = null, _vdNum = "5491100000000", _vdMsg = "";
+  let _vdDestino = null, _vdWrap = null, _vdNum = "", _vdMsg = "";
 
   function ml(field) {
     if (!field) return '';
@@ -241,7 +241,7 @@
     if (bc) bc.textContent = ml(d.nombre);
 
     window.listenSettings(s => {
-      _vdNum = s.whatsapp || "5491100000000";
+      _vdNum = s.whatsapp || "";
       _vdMsg = `Hola, quiero información sobre el viaje a ${ml(d.nombre)}`;
       renderDestino(d, wrap, _vdNum, _vdMsg);
     });
@@ -273,7 +273,7 @@
     const incluye = d.incluye && d.incluye.length
       ? d.incluye.map(i => `<li>${i}</li>`).join("")
       : `<li>${window.t('vd-info-consultar')}</li>`;
-    const whatsappUrl = `https://wa.me/${num}?text=${encodeURIComponent(msg)}`;
+    const whatsappUrl = window.waUrl(num, msg) || `./contacto.html?destino=${encodeURIComponent(ml(d.nombre))}`;
     window._vdIdx = 0;
 
     const heroInfo = `
