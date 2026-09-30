@@ -17,7 +17,7 @@
   } catch(e) {}
 </script>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="./src/style.css?v=202609300722">
+<link rel="stylesheet" href="./src/style.css?v=202609300731">
 <script>try{var _wc=JSON.parse(localStorage.getItem('web_colors')||'null');if(_wc)Object.entries(_wc).forEach(function(e){document.documentElement.style.setProperty(e[0],e[1]);});}catch(e){}</script>
 </head>
 <body>
@@ -88,15 +88,15 @@
       </div>
       <div class="fl-col">
         <div class="fl-title" data-field="footer-contact-title">Contacto</div>
-        <span id="footer-tel"   data-field="f-tel">+54 9 11 0000-0000</span>
-        <span id="footer-email" data-field="f-email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="deb7b0b8b19eb2bfb3bfb2bbaabff0bdb1b3">[email&#160;protected]</a></span>
-        <span id="footer-addr"  data-field="f-addr">Buenos Aires, Argentina</span>
-        <span id="footer-hours" data-field="f-hours">Lun–Vie 9:00–18:00</span>
+        <span data-contacto="tel"></span>
+        <span data-contacto="email"></span>
+        <span data-contacto="addr"></span>
+        <span data-contacto="hours"></span>
       </div>
     </div>
   </div>
   <div class="footer-bottom">
-    <span>© <span id="footer-year"></span> Viajes La Maleta. Todos los derechos reservados.</span>
+    <span>© <span id="footer-year"></span> Viajes La Maleta. <span data-field="footer-rights">Todos los derechos reservados.</span></span>
   </div>
 </footer>
 
@@ -105,9 +105,9 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
 <!-- Scripts locales sin imports -->
-<script src="./src/firebase-config.js?v=202609300722"></script>
-<script src="./src/firebase-compat.js?v=202609300722"></script>
-<script src="./src/i18n-compat.js?v=202609300722"></script>
+<script src="./src/firebase-config.js?v=202609300731"></script>
+<script src="./src/firebase-compat.js?v=202609300731"></script>
+<script src="./src/i18n-compat.js?v=202609300731"></script>
 
 <script>
   function ml(field) {
@@ -218,12 +218,7 @@
   }
 
   function updateFooter(s) {
-    const map = { "footer-tel": s.tel, "footer-email": s.email, "footer-addr": s.addr, "footer-hours": s.hours };
-    Object.entries(map).forEach(([id, val]) => {
-      if (!val) return;
-      const el = document.getElementById(id);
-      if (el) el.textContent = val;
-    });
+    window.applyContactInfo(s);
   }
 
   function updateLogo(s) {

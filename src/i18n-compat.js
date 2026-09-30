@@ -54,7 +54,7 @@ const es = {
   "vd-info-consultar": "Información a consultar", "vd-duracion-default": "Duración a consultar",
   "vd-desc-default": "Descripción no disponible.",
   "vd-cta-h": "¿Te interesa este destino?", "vd-cta-p": "Contactanos para más información y reservas",
-  "vd-whatsapp-btn": "Contactar por WhatsApp", "precio-desde": "desde {precio}", "precio-consultar": "Consultar precio", "vd-incluidos": "incluidos", "vd-precio-persona": "precio por persona",
+  "vd-whatsapp-btn": "Contactar por WhatsApp", "precio-desde": "desde {precio}", "precio-consultar": "Consultar precio", "footer-rights": "Todos los derechos reservados.", "vd-incluidos": "incluidos", "vd-precio-persona": "precio por persona",
   "vd-galeria": "Galería",
   "destinos-ver-btn": "Ver destino →",
   "filtro-todos": "Todos",
@@ -131,7 +131,7 @@ const ca = {
   "vd-info-consultar": "Informació a consultar", "vd-duracion-default": "Durada a consultar",
   "vd-desc-default": "Descripció no disponible.",
   "vd-cta-h": "T'interessa aquesta destinació?", "vd-cta-p": "Contacta'ns per a més informació i reserves",
-  "vd-whatsapp-btn": "Contactar per WhatsApp", "precio-desde": "des de {precio}", "precio-consultar": "Consultar preu", "vd-incluidos": "inclosos", "vd-precio-persona": "preu per persona",
+  "vd-whatsapp-btn": "Contactar per WhatsApp", "precio-desde": "des de {precio}", "precio-consultar": "Consultar preu", "footer-rights": "Tots els drets reservats.", "vd-incluidos": "inclosos", "vd-precio-persona": "preu per persona",
   "vd-galeria": "Galeria",
   "destinos-ver-btn": "Veure destinació →",
   "filtro-todos": "Tots",
@@ -208,7 +208,7 @@ const en = {
   "vd-info-consultar": "Information to be consulted", "vd-duracion-default": "Duration to be confirmed",
   "vd-desc-default": "Description not available.",
   "vd-cta-h": "Interested in this destination?", "vd-cta-p": "Contact us for more information and bookings",
-  "vd-whatsapp-btn": "Contact via WhatsApp", "precio-desde": "from {precio}", "precio-consultar": "Price on request", "vd-incluidos": "included", "vd-precio-persona": "price per person",
+  "vd-whatsapp-btn": "Contact via WhatsApp", "precio-desde": "from {precio}", "precio-consultar": "Price on request", "footer-rights": "All rights reserved.", "vd-incluidos": "included", "vd-precio-persona": "price per person",
   "vd-galeria": "Gallery",
   "destinos-ver-btn": "See destination →",
   "filtro-todos": "All",
@@ -334,6 +334,24 @@ window.waUrl = function(numero, mensaje) {
   if (!n) return null;
   return `https://wa.me/${n}` + (mensaje ? `?text=${encodeURIComponent(mensaje)}` : '');
 };
+
+// ── Datos de contacto (Configuración → Contacto) ──────────
+// Completa todos los <span data-contacto="tel|email|addr|hours"> de la página
+// (footer y columna de Contacto). Se recuerdan para mostrarlos sin esperar.
+window.applyContactInfo = function(s) {
+  const datos = { tel: s.tel || '', email: s.email || '', addr: s.addr || '', hours: s.hours || '' };
+  try { localStorage.setItem('web_contacto', JSON.stringify(datos)); } catch (e) {}
+  document.querySelectorAll('[data-contacto]').forEach(el => {
+    el.textContent = datos[el.dataset.contacto] || '';
+  });
+};
+
+document.addEventListener && document.addEventListener('DOMContentLoaded', () => {
+  try {
+    const guardado = JSON.parse(localStorage.getItem('web_contacto') || 'null');
+    if (guardado) window.applyContactInfo(guardado);
+  } catch (e) {}
+});
 
 // ── Logo del sitio (Configuración → Logo) ─────────────────
 // La imagen va en un <img> propio dentro del encabezado y del pie: el texto
