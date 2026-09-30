@@ -226,8 +226,36 @@ window.langMeta = {
 window.translations = { en, es, ca };
 
 // Helper function to get current language
+// Idioma de la página:
+//  1. el que eligió el visitante con los botones (web_lang)
+//  2. si nunca eligió, el idioma por defecto de Configuración (web_lang_default)
+//  3. español
+const leerLS = k => { try { return localStorage.getItem(k); } catch (e) { return null; } };
+
+// Hasta hoy el idioma por defecto se guardaba como si lo hubiera elegido el
+// visitante: se descarta una vez para que le llegue el idioma por defecto.
+try {
+  if (!localStorage.getItem('web_lang_v2')) {
+    localStorage.removeItem('web_lang');
+    localStorage.setItem('web_lang_v2', '1');
+  }
+} catch (e) {}
+
 window.getCurrentLang = function() {
-  return localStorage.getItem('web_lang') || 'es';
+  return leerLS('web_lang') || leerLS('web_lang_default') || 'es';
+};
+
+// Llamada con site/settings.defaultLang: aplica el idioma por defecto a quien
+// no eligió uno, sin guardarlo como elección suya.
+window.applyDefaultLang = function(lang) {
+  if (!lang || !window.translations[lang]) return;
+  const antes = window.getCurrentLang();
+  try { localStorage.setItem('web_lang_default', lang); } catch (e) {}
+  if (leerLS('web_lang')) return;
+  if (lang !== antes && typeof window.switchLang === 'function') {
+    window.switchLang(lang);
+    try { localStorage.removeItem('web_lang'); } catch (e) {}
+  }
 };
 
 // Helper function to set language
