@@ -18,7 +18,7 @@
 </script>
 
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="./src/style.css?v=202609300541">
+<link rel="stylesheet" href="./src/style.css?v=202609300555">
 <script>try{var _wc=JSON.parse(localStorage.getItem('web_colors')||'null');if(_wc)Object.entries(_wc).forEach(function(e){document.documentElement.style.setProperty(e[0],e[1]);});}catch(e){}</script>
 </head>
 <body>
@@ -79,10 +79,10 @@
   <div class="sec-head"><h2 data-field="dest-title">Destinos Destacados</h2><div class="sec-div"></div></div>
   <!-- Grid dinámico desde Firebase -->
   <div class="dest-grid" id="home-destinos">
-    <div class="dc"><div class="dc-img"><img data-img="d1-img" src="https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=600&q=80" alt="Noruega"></div><div class="dc-body"><div class="dc-name" data-field="d1-name">Noruega</div><div class="dc-desc" data-field="d1-desc">7 Días, desde $1200</div><button class="ver-btn" data-field="d1-btn" onclick="irDestino(0)">Ver más</button></div></div>
-    <div class="dc"><div class="dc-img"><img data-img="d2-img" src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=600&q=80" alt="Japón"></div><div class="dc-body"><div class="dc-name" data-field="d2-name">Japón</div><div class="dc-desc" data-field="d2-desc">7 Días, desde $1200</div><button class="ver-btn" data-field="d2-btn" onclick="irDestino(1)">Ver más</button></div></div>
-    <div class="dc"><div class="dc-img"><img data-img="d3-img" src="https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=600&q=80" alt="Maldivas"></div><div class="dc-body"><div class="dc-name" data-field="d3-name">Maldivas</div><div class="dc-desc" data-field="d3-desc">7 Días, desde $1200</div><button class="ver-btn" data-field="d3-btn" onclick="irDestino(2)">Ver más</button></div></div>
-    <div class="dc"><div class="dc-img"><img data-img="d4-img" src="https://images.unsplash.com/photo-1501854140801-50d01698950b?w=600&q=80" alt="Patagonia"></div><div class="dc-body"><div class="dc-name" data-field="d4-name">Patagonia</div><div class="dc-desc" data-field="d4-desc">7 Días, desde $1200</div><button class="ver-btn" data-field="d4-btn" onclick="irDestino(3)">Ver más</button></div></div>
+    <div class="dc"><div class="dc-img"><img data-img="d1-img" src="https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=600&q=80" alt="Noruega"></div><div class="dc-body"><div class="dc-name" data-field="d1-name">Noruega</div><div class="dc-desc" data-field="d1-desc">7 Días, desde 1200 €</div><button class="ver-btn" data-field="d1-btn" onclick="irDestino(0)">Ver más</button></div></div>
+    <div class="dc"><div class="dc-img"><img data-img="d2-img" src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=600&q=80" alt="Japón"></div><div class="dc-body"><div class="dc-name" data-field="d2-name">Japón</div><div class="dc-desc" data-field="d2-desc">7 Días, desde 1200 €</div><button class="ver-btn" data-field="d2-btn" onclick="irDestino(1)">Ver más</button></div></div>
+    <div class="dc"><div class="dc-img"><img data-img="d3-img" src="https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=600&q=80" alt="Maldivas"></div><div class="dc-body"><div class="dc-name" data-field="d3-name">Maldivas</div><div class="dc-desc" data-field="d3-desc">7 Días, desde 1200 €</div><button class="ver-btn" data-field="d3-btn" onclick="irDestino(2)">Ver más</button></div></div>
+    <div class="dc"><div class="dc-img"><img data-img="d4-img" src="https://images.unsplash.com/photo-1501854140801-50d01698950b?w=600&q=80" alt="Patagonia"></div><div class="dc-body"><div class="dc-name" data-field="d4-name">Patagonia</div><div class="dc-desc" data-field="d4-desc">7 Días, desde 1200 €</div><button class="ver-btn" data-field="d4-btn" onclick="irDestino(3)">Ver más</button></div></div>
   </div>
   <div class="ver-todos-wrap"><a href="./destinos.html" class="ver-todos" data-field="ver-todos">Ver Todos los Viajes  ›</a></div>
 </div>
@@ -154,9 +154,9 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
 <!-- Scripts locales sin imports -->
-<script src="./src/firebase-config.js?v=202609300541"></script>
-<script src="./src/firebase-compat.js?v=202609300541"></script>
-<script src="./src/i18n-compat.js?v=202609300541"></script>
+<script src="./src/firebase-config.js?v=202609300555"></script>
+<script src="./src/firebase-compat.js?v=202609300555"></script>
+<script src="./src/i18n-compat.js?v=202609300555"></script>
 
 <script>
   let _destinosIds = [];
@@ -319,7 +319,7 @@
 
       const nombre = ml(destino.nombre) || `Destino ${index + 1}`;
       const duracion = destino.duracion || "7 días";
-      const precio = destino.precio ? `desde $${destino.precio.toLocaleString("es-AR")}` : "Consultar precio";
+      const precio = window.textoPrecio(destino.precio);
       const descripcionCompleta = `${duracion}, ${precio}`;
 
       return `

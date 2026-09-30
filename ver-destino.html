@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Destino — Viajes La Maleta</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="./src/style.css?v=202609300541">
+<link rel="stylesheet" href="./src/style.css?v=202609300555">
 <script>try{var _wc=JSON.parse(localStorage.getItem('web_colors')||'null');if(_wc)Object.entries(_wc).forEach(function(e){document.documentElement.style.setProperty(e[0],e[1]);});}catch(e){}</script>
 </head>
 <body>
@@ -93,9 +93,9 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
 <!-- Scripts locales sin imports -->
-<script src="./src/firebase-config.js?v=202609300541"></script>
-<script src="./src/firebase-compat.js?v=202609300541"></script>
-<script src="./src/i18n-compat.js?v=202609300541"></script>
+<script src="./src/firebase-config.js?v=202609300555"></script>
+<script src="./src/firebase-compat.js?v=202609300555"></script>
+<script src="./src/i18n-compat.js?v=202609300555"></script>
 
 <script>
   window.addEventListener("DOMContentLoaded", async () => {
@@ -269,7 +269,7 @@
     const imagenes = d.imagenes && d.imagenes.length
       ? d.imagenes
       : ["https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80"];
-    const precio = (d.precio || 0).toLocaleString("es-AR");
+    const precio = window.textoPrecio(d.precio);
     const incluye = d.incluye && d.incluye.length
       ? d.incluye.map(i => `<li>${i}</li>`).join("")
       : `<li>${window.t('vd-info-consultar')}</li>`;
@@ -282,7 +282,7 @@
         <span class="vd-tag">${d.categoria || window.t('breadcrumb-destino')}</span>
         <h1>${nombre}</h1>
         <div class="vd-meta">
-          <span>💰 desde $${precio}</span>
+          <span>💰 ${precio}</span>
           ${d.duracion ? `<span>📅 ${d.duracion}</span>` : ''}
         </div>
       </div>`;
@@ -336,8 +336,8 @@
           </div>
           <div class="vd-sidebar">
             <div class="vd-reserve-box">
-              <div class="vd-rb-precio">$${precio}</div>
-              <div class="vd-rb-sub">${window.t('vd-precio-persona') || 'precio por persona'}</div>
+              <div class="vd-rb-precio">${Number(d.precio) > 0 ? window.formatPrecio(d.precio) : window.t('precio-consultar')}</div>
+              ${Number(d.precio) > 0 ? `<div class="vd-rb-sub">${window.t('vd-precio-persona')}</div>` : ''}
               <a href="${whatsappUrl}" target="_blank" class="vd-rb-wa">
                 ${WA_SVG} ${window.t('vd-whatsapp-btn')}
               </a>

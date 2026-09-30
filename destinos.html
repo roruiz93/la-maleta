@@ -17,7 +17,7 @@
   } catch(e) {}
 </script>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="./src/style.css?v=202609300541">
+<link rel="stylesheet" href="./src/style.css?v=202609300555">
 <script>try{var _wc=JSON.parse(localStorage.getItem('web_colors')||'null');if(_wc)Object.entries(_wc).forEach(function(e){document.documentElement.style.setProperty(e[0],e[1]);});}catch(e){}</script>
 </head>
 <body>
@@ -108,9 +108,9 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
 <!-- Scripts locales sin imports -->
-<script src="./src/firebase-config.js?v=202609300541"></script>
-<script src="./src/firebase-compat.js?v=202609300541"></script>
-<script src="./src/i18n-compat.js?v=202609300541"></script>
+<script src="./src/firebase-config.js?v=202609300555"></script>
+<script src="./src/firebase-compat.js?v=202609300555"></script>
+<script src="./src/i18n-compat.js?v=202609300555"></script>
 
 <script>
   let todos = [];
@@ -282,7 +282,7 @@
     const img = d.imagenes && d.imagenes[0] ? d.imagenes[0] : "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80";
     const nombre = ml(d.nombre);
     const descCorta = ml(d.descripcionCorta) || ml(d.descripcion).slice(0, 90);
-    const precio = (d.precio || 0).toLocaleString("es-AR");
+    const precio = window.textoPrecio(d.precio);
     return `
       <a class="destino-card-full" href="./ver-destino.html?id=${d.id}">
         <div class="dcf-img">
@@ -293,7 +293,7 @@
           <div class="dcf-name">${nombre}</div>
           <div class="dcf-desc">${descCorta}</div>
           <div class="dcf-footer">
-            <span class="dcf-price">desde $${precio}</span>
+            <span class="dcf-price">${precio}</span>
             <span class="dcf-btn">${window.t('destinos-ver-btn')}</span>
           </div>
         </div>

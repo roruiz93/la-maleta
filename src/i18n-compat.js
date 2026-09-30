@@ -6,10 +6,10 @@ const es = {
   "nav1": "Destinos", "nav2": "Experiencias", "nav3": "Nosotros", "nav4": "Blog", "nav5": "Contacto",
   "nav-cta": "Solicitá información", "hero-h1": "Organizamos los viajes<br>que siempre soñaste",
   "hero-sub": "Descubrí destinos únicos con un trato cercano y personalizado", "hero-btn1": "Ver Destinos", "hero-btn2": "Sobre Nosotros",
-  "dest-title": "Destinos Destacados", "d1-name": "Noruega", "d1-desc": "7 Días, desde $1200", "d1-btn": "Ver más",
-  "d2-name": "Japón", "d2-desc": "7 Días, desde $1200", "d2-btn": "Ver más",
-  "d3-name": "Maldivas", "d3-desc": "7 Días, desde $1200", "d3-btn": "Ver más",
-  "d4-name": "Patagonia", "d4-desc": "7 Días, desde $1200", "d4-btn": "Ver más",
+  "dest-title": "Destinos Destacados", "d1-name": "Noruega", "d1-desc": "7 Días, desde 1200 €", "d1-btn": "Ver más",
+  "d2-name": "Japón", "d2-desc": "7 Días, desde 1200 €", "d2-btn": "Ver más",
+  "d3-name": "Maldivas", "d3-desc": "7 Días, desde 1200 €", "d3-btn": "Ver más",
+  "d4-name": "Patagonia", "d4-desc": "7 Días, desde 1200 €", "d4-btn": "Ver más",
   "ver-todos": "Ver Todos los Viajes  ›", "pq-title": "¿Por Qué Elegirnos?",
   "pq1": "Atención Personalizada", "pq2": "Viajes a tu Medida", "pq3": "Seguridad y Confianza", "pq4": "20 Años de Experiencia",
   "test-title": "Testimonios de Nuestros Viajeros", "t1-name": "Laura Gómez", "t1-text": "\"Un viaje increíble, superado todas nuestras expectativas!\"",
@@ -54,7 +54,7 @@ const es = {
   "vd-info-consultar": "Información a consultar", "vd-duracion-default": "Duración a consultar",
   "vd-desc-default": "Descripción no disponible.",
   "vd-cta-h": "¿Te interesa este destino?", "vd-cta-p": "Contactanos para más información y reservas",
-  "vd-whatsapp-btn": "Contactar por WhatsApp",
+  "vd-whatsapp-btn": "Contactar por WhatsApp", "precio-desde": "desde {precio}", "precio-consultar": "Consultar precio", "vd-precio-persona": "precio por persona",
   "vd-galeria": "Galería",
   "destinos-ver-btn": "Ver destino →",
   "filtro-todos": "Todos",
@@ -65,10 +65,10 @@ const ca = {
   "nav1": "Destinacions", "nav2": "Experiències", "nav3": "Nosaltres", "nav4": "Blog", "nav5": "Contacte",
   "nav-cta": "Sol·licita informació", "hero-h1": "Organitzem els viatges<br>que sempre has somiat",
   "hero-sub": "Descobreix destinacions úniques amb un tracte proper i personalitzat", "hero-btn1": "Veure Destinacions", "hero-btn2": "Sobre Nosaltres",
-  "dest-title": "Destinacions Destacades", "d1-name": "Noruega", "d1-desc": "7 Dies, des de $1200", "d1-btn": "Veure més",
-  "d2-name": "Japó", "d2-desc": "7 Dies, des de $1200", "d2-btn": "Veure més",
-  "d3-name": "Maldives", "d3-desc": "7 Dies, des de $1200", "d3-btn": "Veure més",
-  "d4-name": "Patagònia", "d4-desc": "7 Dies, des de $1200", "d4-btn": "Veure més",
+  "dest-title": "Destinacions Destacades", "d1-name": "Noruega", "d1-desc": "7 Dies, des de 1200 €", "d1-btn": "Veure més",
+  "d2-name": "Japó", "d2-desc": "7 Dies, des de 1200 €", "d2-btn": "Veure més",
+  "d3-name": "Maldives", "d3-desc": "7 Dies, des de 1200 €", "d3-btn": "Veure més",
+  "d4-name": "Patagònia", "d4-desc": "7 Dies, des de 1200 €", "d4-btn": "Veure més",
   "ver-todos": "Veure Tots els Viatjes  ›", "pq-title": "Per Què Triar-nos?",
   "pq1": "Atenció Personalitzada", "pq2": "Viatges a la teva Mida", "pq3": "Seguretat i Confiança", "pq4": "20 Anys d'Experiència",
   "test-title": "Testimonis dels Nostres Viatgers", "t1-name": "Laura Gómez", "t1-text": "\"Un viatge increïble, ha superat totes les nostres expectatives!\"",
@@ -132,7 +132,7 @@ const ca = {
   "vd-info-consultar": "Informació a consultar", "vd-duracion-default": "Durada a consultar",
   "vd-desc-default": "Descripció no disponible.",
   "vd-cta-h": "T'interessa aquesta destinació?", "vd-cta-p": "Contacta'ns per a més informació i reserves",
-  "vd-whatsapp-btn": "Contactar per WhatsApp",
+  "vd-whatsapp-btn": "Contactar per WhatsApp", "precio-desde": "des de {precio}", "precio-consultar": "Consultar preu", "vd-precio-persona": "preu per persona",
   "vd-galeria": "Galeria",
   "destinos-ver-btn": "Veure destinació →",
   "filtro-todos": "Tots",
@@ -143,10 +143,10 @@ const en = {
   "nav1": "Destinations", "nav2": "Experiences", "nav3": "About Us", "nav4": "Blog", "nav5": "Contact",
   "nav-cta": "Request Information", "hero-h1": "We organize the trips<br>you've always dreamed of",
   "hero-sub": "Discover unique destinations with close and personalized service", "hero-btn1": "See Destinations", "hero-btn2": "About Us",
-  "dest-title": "Featured Destinations", "d1-name": "Norway", "d1-desc": "7 Days, from $1200", "d1-btn": "See more",
-  "d2-name": "Japan", "d2-desc": "7 Days, from $1200", "d2-btn": "See more",
-  "d3-name": "Maldives", "d3-desc": "7 Days, from $1200", "d3-btn": "See more",
-  "d4-name": "Patagonia", "d4-desc": "7 Days, from $1200", "d4-btn": "See more",
+  "dest-title": "Featured Destinations", "d1-name": "Norway", "d1-desc": "7 Days, from €1,200", "d1-btn": "See more",
+  "d2-name": "Japan", "d2-desc": "7 Days, from €1,200", "d2-btn": "See more",
+  "d3-name": "Maldives", "d3-desc": "7 Days, from €1,200", "d3-btn": "See more",
+  "d4-name": "Patagonia", "d4-desc": "7 Days, from €1,200", "d4-btn": "See more",
   "ver-todos": "See All Trips  ›", "pq-title": "Why Choose Us?",
   "pq1": "Personalized Service", "pq2": "Tailor-made Trips", "pq3": "Safety and Trust", "pq4": "20 Years of Experience",
   "test-title": "Testimonials from Our Travelers", "t1-name": "Laura Gómez", "t1-text": "\"An incredible trip, exceeded all our expectations!\"",
@@ -210,7 +210,7 @@ const en = {
   "vd-info-consultar": "Information to be consulted", "vd-duracion-default": "Duration to be confirmed",
   "vd-desc-default": "Description not available.",
   "vd-cta-h": "Interested in this destination?", "vd-cta-p": "Contact us for more information and bookings",
-  "vd-whatsapp-btn": "Contact via WhatsApp",
+  "vd-whatsapp-btn": "Contact via WhatsApp", "precio-desde": "from {precio}", "precio-consultar": "Price on request", "vd-precio-persona": "price per person",
   "vd-galeria": "Gallery",
   "destinos-ver-btn": "See destination →",
   "filtro-todos": "All",
@@ -256,6 +256,24 @@ window.getTexts = function(lang) {
     });
   });
   return { ...base, ...editados };
+};
+
+// ── Precios (euros) ───────────────────────────────────────
+const LOCALE_PRECIO = { es: 'es-ES', ca: 'ca-ES', en: 'en-GB' };
+
+// 1200 → "1200 €" (es/ca) o "€1,200" (en)
+window.formatPrecio = function(n, lang) {
+  const l = lang || window.getCurrentLang();
+  return new Intl.NumberFormat(LOCALE_PRECIO[l] || 'es-ES', {
+    style: 'currency', currency: 'EUR', maximumFractionDigits: 0,
+  }).format(Number(n) || 0);
+};
+
+// "desde 1200 €" o "Consultar precio" si no hay precio cargado
+window.textoPrecio = function(n) {
+  return Number(n) > 0
+    ? window.t('precio-desde').replace('{precio}', window.formatPrecio(n))
+    : window.t('precio-consultar');
 };
 
 // ── WhatsApp ──────────────────────────────────────────────
