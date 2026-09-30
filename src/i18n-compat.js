@@ -338,11 +338,20 @@ window.waUrl = function(numero, mensaje) {
 // ── Datos de contacto (Configuración → Contacto) ──────────
 // Completa todos los <span data-contacto="tel|email|addr|hours"> de la página
 // (footer y columna de Contacto). Se recuerdan para mostrarlos sin esperar.
+// El horario puede venir en 3 idiomas ({ es, ca, en }) o como texto (español).
+let contactoActual = null;
 window.applyContactInfo = function(s) {
-  const datos = { tel: s.tel || '', email: s.email || '', addr: s.addr || '', hours: s.hours || '' };
-  try { localStorage.setItem('web_contacto', JSON.stringify(datos)); } catch (e) {}
+  contactoActual = { tel: s.tel || '', email: s.email || '', addr: s.addr || '', hours: s.hours || '' };
+  try { localStorage.setItem('web_contacto', JSON.stringify(contactoActual)); } catch (e) {}
+  window.refreshContactInfo();
+};
+
+// Se vuelve a llamar al cambiar de idioma (switchLang de cada página)
+window.refreshContactInfo = function() {
+  if (!contactoActual) return;
+  const valor = k => k === 'hours' ? window.mlTexto(contactoActual.hours) : contactoActual[k];
   document.querySelectorAll('[data-contacto]').forEach(el => {
-    el.textContent = datos[el.dataset.contacto] || '';
+    el.textContent = valor(el.dataset.contacto) || '';
   });
 };
 

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Destino — Viajes La Maleta</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="./src/style.css?v=202609300731">
+<link rel="stylesheet" href="./src/style.css?v=202609300754">
 <script>try{var _wc=JSON.parse(localStorage.getItem('web_colors')||'null');if(_wc)Object.entries(_wc).forEach(function(e){document.documentElement.style.setProperty(e[0],e[1]);});}catch(e){}</script>
 </head>
 <body>
@@ -93,9 +93,9 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
 <!-- Scripts locales sin imports -->
-<script src="./src/firebase-config.js?v=202609300731"></script>
-<script src="./src/firebase-compat.js?v=202609300731"></script>
-<script src="./src/i18n-compat.js?v=202609300731"></script>
+<script src="./src/firebase-config.js?v=202609300754"></script>
+<script src="./src/firebase-compat.js?v=202609300754"></script>
+<script src="./src/i18n-compat.js?v=202609300754"></script>
 
 <script>
   window.addEventListener("DOMContentLoaded", async () => {
@@ -145,6 +145,7 @@
       localStorage.setItem("web_lang", c);
       document.documentElement.lang = c;
       applyLang(c, true);
+      window.refreshContactInfo();
       buildLangSwitcher();
       if (_vdDestino && _vdWrap) renderDestino(_vdDestino, _vdWrap, _vdNum, _vdMsg);
     };
