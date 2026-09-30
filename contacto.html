@@ -332,49 +332,84 @@
     });
   }
 
+  // ─── Formulario de contacto ─────────────────────────────
+  // Los datos se guardan como texto plano: el admin los escapa al mostrarlos
+  // y firestore.rules valida campos, tipos y tamaños.
+  const CONTACTO_LIMITE = 3;                 // envíos...
+  const CONTACTO_VENTANA = 10 * 60 * 1000;   // ...cada 10 minutos por navegador
+  let contactoAbierto = Date.now();
+
   function initContacto() {
-    const form = document.getElementById("contact-form");
-    if (!form) return;
-
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-
-      const btn = form.querySelector("button[type='submit']");
-      const originalText = btn.innerHTML;
-      btn.innerHTML = "Enviando...";
-      btn.disabled = true;
-
-      try {
-        const formData = {
-          nombre: form.nombre.value.trim(),
-          email: form.email.value.trim(),
-          telefono: form.telefono?.value.trim() || "",
-          asunto: form.asunto?.value.trim() || "Consulta desde web",
-          mensaje: form.mensaje.value.trim(),
-          fecha: new Date().toISOString()
-        };
-
-        await window.saveConsulta(formData);
-
-        // Mostrar mensaje de éxito
-        form.innerHTML = `
-          <div style="text-align: center; padding: 40px; background: var(--card-bg); border-radius: 12px; border: 2px solid var(--gold);">
-            <div style="color: var(--gold); font-size: 48px; margin-bottom: 16px;">✅</div>
-            <h3 style="color: var(--text); margin-bottom: 8px;">¡Gracias por tu mensaje!</h3>
-            <p style="color: var(--text); opacity: 0.8;">Te contactamos en las próximas 24 horas.</p>
-          </div>
-        `;
-
-      } catch (error) {
-        console.error("Error enviando consulta:", error);
-        btn.innerHTML = "Error - Inténtalo de nuevo";
-        btn.disabled = false;
-        setTimeout(() => {
-          btn.innerHTML = originalText;
-        }, 3000);
-      }
-    });
+    contactoAbierto = Date.now();
+    // Si llega desde un destino (?destino=Noruega), precargar el mensaje
+    const destino = new URLSearchParams(location.search).get("destino");
+    const msgEl = document.getElementById("c-msg");
+    if (destino && msgEl && !msgEl.value) {
+      msgEl.value = `Hola, me interesa el viaje a ${destino.slice(0, 150)}. ¿Podría darme más información?`;
+    }
   }
+
+  function envíosRecientes() {
+    try {
+      const ahora = Date.now();
+      return JSON.parse(localStorage.getItem("contacto_envios") || "[]").filter(t => ahora - t < CONTACTO_VENTANA);
+    } catch (e) { return []; }
+  }
+
+  function mostrarErrContacto(key) {
+    const el = document.getElementById("c-err");
+    if (!el) return;
+    el.textContent = "❌ " + window.t(key);
+    el.classList.add("show");
+  }
+
+  window.enviarContacto = async function() {
+    const err = document.getElementById("c-err");
+    err?.classList.remove("show");
+
+    // Bots: rellenan el campo oculto o envían a los pocos milisegundos de cargar
+    if (document.getElementById("hp-c")?.value || Date.now() - contactoAbierto < 3000) return;
+
+    const val = id => (document.getElementById(id)?.value || "").trim();
+    const datos = {
+      nombre:  val("c-nombre").slice(0, 100),
+      email:   val("c-email").slice(0, 200),
+      tel:     val("c-tel").slice(0, 30),
+      asunto:  val("c-asunto").slice(0, 150),
+      mensaje: val("c-msg").slice(0, 3000),
+      origen:  "contacto",
+    };
+    const destino = new URLSearchParams(location.search).get("destino");
+    if (destino) datos.destino = destino.slice(0, 150);
+
+    if (datos.nombre.length < 2) return mostrarErrContacto("form-err-nombre");
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(datos.email)) return mostrarErrContacto("form-err-email");
+    if (datos.tel && !/^[\d\s+\-()]{7,30}$/.test(datos.tel)) return mostrarErrContacto("form-err-tel");
+    if (!datos.mensaje && !datos.asunto) return mostrarErrContacto("form-err-mensaje");
+
+    const recientes = envíosRecientes();
+    if (recientes.length >= CONTACTO_LIMITE) return mostrarErrContacto("form-err-rate");
+
+    const btn = document.getElementById("c-submit");
+    const textoBtn = btn.innerHTML;
+    btn.disabled = true;
+    btn.textContent = window.t("form-sending");
+    try {
+      await window.saveConsulta(datos);
+      try { localStorage.setItem("contacto_envios", JSON.stringify([...recientes, Date.now()])); } catch (e) {}
+      document.getElementById("c-ok")?.classList.add("show");
+      ["c-nombre", "c-email", "c-tel", "c-asunto", "c-msg"].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = "";
+      });
+      btn.innerHTML = textoBtn;
+    } catch (e) {
+      mostrarErrContacto("form-err-send");
+      btn.innerHTML = textoBtn;
+    } finally {
+      btn.disabled = false;
+    }
+  };
 </script>
 </body>
 </html>

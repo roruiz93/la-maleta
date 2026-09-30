@@ -25,10 +25,34 @@ service cloud.firestore {
     // Blog posts
     match /posts/{id}        { allow read: if true; allow write: if isEditor(); }
 
-    // Consultas — cualquiera puede crear, solo admins pueden leer
+    // Consultas — cualquiera puede crear (formulario público), pero solo con
+    // los campos, tipos y tamaños que manda la web. Solo el equipo las lee.
+    function strOk(v, minLen, maxLen) {
+      return v is string && v.size() >= minLen && v.size() <= maxLen;
+    }
+    function optStr(d, k, maxLen) {
+      return !(k in d) || strOk(d[k], 0, maxLen);
+    }
+    function consultaValida(d) {
+      return d.keys().hasOnly(['nombre','email','tel','asunto','mensaje','origen','destino','leida','fecha'])
+        && strOk(d.nombre, 2, 100)
+        && strOk(d.email, 5, 200)
+        && d.email.matches('^[^@ ]+@[^@ ]+[.][^@ ]+$')
+        && optStr(d, 'tel', 30)
+        && optStr(d, 'asunto', 150)
+        && optStr(d, 'mensaje', 3000)
+        && optStr(d, 'origen', 30)
+        && optStr(d, 'destino', 150)
+        && d.leida == false
+        && strOk(d.fecha, 10, 40);
+    }
+
     match /consultas/{id} {
-      allow create: if true;
-      allow read, update, delete: if isEditor();
+      allow create: if id.matches('consulta_[0-9]{10,16}') && consultaValida(request.resource.data);
+      allow read, delete: if isEditor();
+      // El admin solo marca como leída
+      allow update: if isEditor()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['leida']);
     }
 
     // Usuarios
