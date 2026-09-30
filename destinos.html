@@ -50,6 +50,7 @@
   <a href="./blog.html" data-field="nav4">Blog</a>
   <a href="./contacto.html" data-field="nav5">Contacto</a>
   <a href="./contacto.html" class="nav-cta" data-field="nav-cta">Solicitá información</a>
+  <div id="lang-switcher" class="mobile-lang-bar"></div>
 </div>
 
 <div class="page-hero">
@@ -115,6 +116,12 @@
   let todos = [];
   let filtro = "todos";
 
+  function ml(field) {
+    if (!field) return '';
+    const lang = window.getCurrentLang ? window.getCurrentLang() : 'es';
+    return typeof field === 'object' ? (field[lang] || field.es || '') : field;
+  }
+
   window.addEventListener("DOMContentLoaded", () => {
     waitForDependencies().then(() => {
       initShared();
@@ -160,7 +167,7 @@
 
     // Contenido
     window.listenContent(data => {
-      if (data) applyLang(window.getCurrentLang());
+      if (data) { window.setSiteContent(data); applyLang(window.getCurrentLang()); }
     });
 
     // Funciones globales
@@ -169,6 +176,8 @@
       document.documentElement.lang = c;
       applyLang(c, true);
       buildLangSwitcher();
+      renderFiltros();
+      renderGrid(filtro === "todos" ? todos : todos.filter(d => d.categoria === filtro));
     };
     window.toggleMenu = () => document.getElementById("mobile-menu")?.classList.toggle("open");
   }
@@ -183,7 +192,7 @@
   }
 
   function applyLang(lang, animate = false) {
-    const base = window.translations[lang] || window.translations["es"];
+    const base = window.getTexts(lang);
     document.querySelectorAll("[data-field]").forEach(el => {
       const val = base[el.dataset.field];
       if (val === undefined) return;
@@ -249,7 +258,7 @@
     if (cats.length <= 2) { wrap.innerHTML = ""; return; }
     wrap.innerHTML = cats.map(c => `
       <button class="filtro-btn ${c === filtro ? "active" : ""}" onclick="filtrarDest('${c}')">
-        ${c === "todos" ? "Todos" : c}
+        ${c === "todos" ? window.t('filtro-todos') : c}
       </button>`).join("");
   }
 
@@ -269,7 +278,7 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="64" height="64">
             <path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 16l4.553 2.276A1 1 0 0021 24.382V8.618a1 1 0 00-.553-.894L15 5m0 18V5m0 0L9 7"/>
           </svg>
-          <p>No hay destinos en esta categoría todavía.</p>
+          <p>${window.t('destinos-empty-cat')}</p>
         </div>`;
       return;
     }
@@ -278,20 +287,21 @@
 
   function cardDestino(d) {
     const img = d.imagenes && d.imagenes[0] ? d.imagenes[0] : "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80";
-    const desc = d.descripcionCorta || (d.descripcion || "").slice(0, 90);
+    const nombre = ml(d.nombre);
+    const descCorta = ml(d.descripcionCorta) || ml(d.descripcion).slice(0, 90);
     const precio = (d.precio || 0).toLocaleString("es-AR");
     return `
       <a class="destino-card-full" href="./ver-destino.html?id=${d.id}">
         <div class="dcf-img">
-          <img src="${img}" alt="${d.nombre}" loading="lazy">
+          <img src="${img}" alt="${nombre}" loading="lazy">
           ${d.categoria ? `<span class="dcf-badge">${d.categoria}</span>` : ""}
         </div>
         <div class="dcf-body">
-          <div class="dcf-name">${d.nombre}</div>
-          <div class="dcf-desc">${desc}</div>
+          <div class="dcf-name">${nombre}</div>
+          <div class="dcf-desc">${descCorta}</div>
           <div class="dcf-footer">
             <span class="dcf-price">desde $${precio}</span>
-            <span class="dcf-btn">Ver destino →</span>
+            <span class="dcf-btn">${window.t('destinos-ver-btn')}</span>
           </div>
         </div>
       </a>`;

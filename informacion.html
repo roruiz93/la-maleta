@@ -53,6 +53,7 @@
   <a href="./blog.html"        data-field="nav4">Blog</a>
   <a href="./contacto.html"    data-field="nav5">Contacto</a>
   <a href="./contacto.html"    data-field="nav-cta" class="nav-cta">Solicitá información</a>
+  <div id="lang-switcher" class="mobile-lang-bar"></div>
 </div>
 
 <div class="page-hero">
@@ -109,6 +110,12 @@
 <script src="./src/i18n-compat.js"></script>
 
 <script>
+  function ml(field) {
+    if (!field) return '';
+    const lang = window.getCurrentLang ? window.getCurrentLang() : 'es';
+    return typeof field === 'object' ? (field[lang] || field.es || '') : field;
+  }
+
   window.addEventListener("DOMContentLoaded", async () => {
     await waitForDependencies();
     initShared();
@@ -148,7 +155,7 @@
 
     // Contenido
     window.listenContent(data => {
-      if (data) applyLang(window.getCurrentLang());
+      if (data) { window.setSiteContent(data); applyLang(window.getCurrentLang()); }
     });
 
     // Funciones globales
@@ -172,7 +179,7 @@
   }
 
   function applyLang(lang, animate = false) {
-    const base = window.translations[lang] || window.translations["es"];
+    const base = window.getTexts(lang);
     document.querySelectorAll("[data-field]").forEach(el => {
       const val = base[el.dataset.field];
       if (val === undefined) return;

@@ -26,6 +26,21 @@ window.listenContent = function(callback) {
   });
 };
 
+// Imágenes editables desde el admin (site/images): { "e1-img": url, ... }
+// Se aplican a los <img data-img="..."> de la página.
+window.listenImages = function(callback) {
+  return db.collection("site").doc("images").onSnapshot(snap => {
+    if (snap.exists) callback(snap.data());
+  });
+};
+
+window.applySiteImages = function(images) {
+  document.querySelectorAll("img[data-img]").forEach(el => {
+    const url = images[el.dataset.img];
+    if (typeof url === "string" && url) el.src = url;
+  });
+};
+
 // ─────────────────────────────
 // COLORS
 // ─────────────────────────────

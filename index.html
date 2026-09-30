@@ -55,6 +55,7 @@
   <a href="./blog.html" data-field="nav4">Blog</a>
   <a href="./contacto.html" data-field="nav5">Contacto</a>
   <a href="./contacto.html" class="nav-cta" data-field="nav-cta">Solicitá información</a>
+  <div id="lang-switcher" class="mobile-lang-bar"></div>
 </div>
 
 <!-- HERO -->
@@ -159,6 +160,13 @@
 
 <script>
   let _destinosIds = [];
+  let _destinosHome = [];
+
+  function ml(field) {
+    if (!field) return '';
+    const lang = window.getCurrentLang ? window.getCurrentLang() : 'es';
+    return typeof field === 'object' ? (field[lang] || field.es || '') : field;
+  }
 
   window.addEventListener("DOMContentLoaded", () => {
     waitForDependencies().then(() => {
@@ -200,7 +208,7 @@
 
     // Contenido
     window.listenContent(data => {
-      if (data) applyLang(window.getCurrentLang());
+      if (data) { window.setSiteContent(data); applyLang(window.getCurrentLang()); }
     });
 
     // Funciones globales
@@ -209,6 +217,7 @@
       document.documentElement.lang = c;
       applyLang(c, true);
       buildLangSwitcher();
+      renderHomeDestinos(_destinosHome);
     };
     window.toggleMenu = () => document.getElementById("mobile-menu")?.classList.toggle("open");
 
@@ -223,6 +232,7 @@
     // Destinos destacados dinámicos
     window.listenDestinos(items => {
       _destinosIds = items.map(d => d.id);
+      _destinosHome = items;
       renderHomeDestinos(items);
     });
   }
@@ -237,7 +247,7 @@
   }
 
   function applyLang(lang, animate = false) {
-    const base = window.translations[lang] || window.translations["es"];
+    const base = window.getTexts(lang);
     document.querySelectorAll("[data-field]").forEach(el => {
       const val = base[el.dataset.field];
       if (val === undefined) return;
@@ -307,7 +317,7 @@
         ? destino.imagenes[0]
         : `https://images.unsplash.com/photo-${getRandomUnsplashId(index)}?w=600&q=80`;
 
-      const nombre = destino.nombre || `Destino ${index + 1}`;
+      const nombre = ml(destino.nombre) || `Destino ${index + 1}`;
       const duracion = destino.duracion || "7 días";
       const precio = destino.precio ? `desde $${destino.precio.toLocaleString("es-AR")}` : "Consultar precio";
       const descripcionCompleta = `${duracion}, ${precio}`;

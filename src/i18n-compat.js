@@ -54,7 +54,11 @@ const es = {
   "vd-info-consultar": "Información a consultar", "vd-duracion-default": "Duración a consultar",
   "vd-desc-default": "Descripción no disponible.",
   "vd-cta-h": "¿Te interesa este destino?", "vd-cta-p": "Contactanos para más información y reservas",
-  "vd-whatsapp-btn": "Contactar por WhatsApp"
+  "vd-whatsapp-btn": "Contactar por WhatsApp",
+  "vd-galeria": "Galería",
+  "destinos-ver-btn": "Ver destino →",
+  "filtro-todos": "Todos",
+  "destinos-empty-cat": "No hay destinos en esta categoría todavía."
 };
 
 const ca = {
@@ -128,7 +132,11 @@ const ca = {
   "vd-info-consultar": "Informació a consultar", "vd-duracion-default": "Durada a consultar",
   "vd-desc-default": "Descripció no disponible.",
   "vd-cta-h": "T'interessa aquesta destinació?", "vd-cta-p": "Contacta'ns per a més informació i reserves",
-  "vd-whatsapp-btn": "Contactar per WhatsApp"
+  "vd-whatsapp-btn": "Contactar per WhatsApp",
+  "vd-galeria": "Galeria",
+  "destinos-ver-btn": "Veure destinació →",
+  "filtro-todos": "Tots",
+  "destinos-empty-cat": "No hi ha destinacions en aquesta categoria encara."
 };
 
 const en = {
@@ -202,7 +210,11 @@ const en = {
   "vd-info-consultar": "Information to be consulted", "vd-duracion-default": "Duration to be confirmed",
   "vd-desc-default": "Description not available.",
   "vd-cta-h": "Interested in this destination?", "vd-cta-p": "Contact us for more information and bookings",
-  "vd-whatsapp-btn": "Contact via WhatsApp"
+  "vd-whatsapp-btn": "Contact via WhatsApp",
+  "vd-galeria": "Gallery",
+  "destinos-ver-btn": "See destination →",
+  "filtro-todos": "All",
+  "destinos-empty-cat": "No destinations in this category yet."
 };
 
 // Language metadata for switcher
@@ -227,9 +239,95 @@ window.setCurrentLang = function(lang) {
 };
 
 // Helper function to get translation
+// Textos editados desde el admin (Firestore site/content). Pisan a los
+// textos por defecto de arriba, salvo los campos guardados vacíos.
+let siteContent = {};
+
+window.setSiteContent = function(data) {
+  siteContent = data || {};
+};
+
+window.getTexts = function(lang) {
+  const base = window.translations[lang] || window.translations['es'];
+  const editados = {};
+  [siteContent[lang] || {}, preview.lang === lang ? preview.texts : {}].forEach(capa => {
+    Object.entries(capa).forEach(([k, v]) => {
+      if (typeof v === 'string' && v.trim()) editados[k] = v;
+    });
+  });
+  return { ...base, ...editados };
+};
+
+// ── Vista previa desde el admin ──────────────────────────
+// El admin abre la página con ?preview=1 dentro de un iframe y le manda por
+// postMessage los textos sin guardar. Solo se muestran en ese iframe: no se
+// guarda nada. Se aceptan mensajes únicamente de los orígenes del admin,
+// porque los textos se insertan como HTML.
+const ADMIN_ORIGINS = [
+  'https://la-maleta-admin.web.app',
+  'https://la-maleta-admin.firebaseapp.com',
+  'http://localhost:5180',
+  'http://localhost:5173',
+];
+const preview = { lang: null, texts: {} };
+
+if (new URLSearchParams(location.search).has('preview') && window.parent !== window) {
+  window.addEventListener('message', event => {
+    if (!ADMIN_ORIGINS.includes(event.origin)) return;
+    const msg = event.data || {};
+    if (msg.type === 'lm-preview-colors') { aplicarColoresPreview(msg.colors || {}); return; }
+    if (msg.type !== 'lm-preview' || !window.translations[msg.lang]) return;
+    preview.lang = msg.lang;
+    preview.texts = msg.texts || {};
+    // En la vista previa el idioma lo decide el admin (sin tocar la preferencia guardada)
+    window.getCurrentLang = () => preview.lang;
+    aplicarPreview();
+  });
+  // Avisar al admin que ya puede mandar los textos
+  window.parent.postMessage({ type: 'lm-preview-ready' }, '*');
+}
+
+// Colores sin guardar (Configuración del admin). Van en un <style> con
+// !important para que no los pise applyColors() cuando llega site/settings.
+const COLOR_VARS = { gold: '--gold', bg: '--bg', text: '--text', primary: '--primary', cardBg: '--card-bg' };
+function aplicarColoresPreview(colors) {
+  const reglas = Object.entries(COLOR_VARS)
+    .filter(([k]) => /^#[0-9a-f]{6}$/i.test(colors[k] || ''))
+    .map(([k, v]) => `${v}: ${colors[k]} !important;`)
+    .join(' ');
+  let style = document.getElementById('lm-preview-colors');
+  if (!style) {
+    style = document.createElement('style');
+    style.id = 'lm-preview-colors';
+    document.head.appendChild(style);
+  }
+  style.textContent = reglas ? `:root { ${reglas} }` : '';
+}
+
+// Cada página define su propio switchLang cuando termina de cargar. En la vista
+// previa se envuelve: siempre muestra el idioma del admin (también cuando la
+// página intenta pasar al idioma por defecto) y no pisa la preferencia guardada.
+function aplicarPreview(intentos = 0) {
+  if (typeof window.switchLang !== 'function') {
+    if (intentos < 100) setTimeout(() => aplicarPreview(intentos + 1), 50);
+    return;
+  }
+  if (!window.switchLang._preview) {
+    const original = window.switchLang;
+    window.switchLang = () => {
+      const guardado = localStorage.getItem('web_lang');
+      original(preview.lang);
+      if (guardado === null) localStorage.removeItem('web_lang');
+      else localStorage.setItem('web_lang', guardado);
+    };
+    window.switchLang._preview = true;
+  }
+  window.switchLang();
+}
+
 window.t = function(key, lang) {
   const currentLang = lang || window.getCurrentLang();
-  return window.translations[currentLang]?.[key] || window.translations['es']?.[key] || key;
+  return window.getTexts(currentLang)[key] || window.getTexts('es')[key] || key;
 };
 
 })();

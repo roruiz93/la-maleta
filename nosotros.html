@@ -49,6 +49,7 @@
   <a href="./nosotros.html"    data-field="nav3">Nosotros</a>
   <a href="./contacto.html"    data-field="nav5">Contacto</a>
   <a href="./contacto.html"    data-field="nav-cta" class="nav-cta">Solicitá info</a>
+  <div id="lang-switcher" class="mobile-lang-bar"></div>
 </div>
 
 <!-- PAGE HERO -->
@@ -275,8 +276,11 @@
 
     // Contenido
     window.listenContent(data => {
-      if (data) applyLang(window.getCurrentLang());
+      if (data) { window.setSiteContent(data); applyLang(window.getCurrentLang()); }
     });
+
+    // Fotos del equipo cargadas desde el admin
+    window.listenImages(window.applySiteImages);
 
     // Funciones globales
     window.switchLang = c => {
@@ -298,7 +302,7 @@
   }
 
   function applyLang(lang, animate = false) {
-    const base = window.translations[lang] || window.translations["es"];
+    const base = window.getTexts(lang);
     document.querySelectorAll("[data-field]").forEach(el => {
       const val = base[el.dataset.field];
       if (val === undefined) return;

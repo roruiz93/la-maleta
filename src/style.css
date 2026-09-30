@@ -46,6 +46,9 @@ nav a:hover, nav a.nav-active { color:var(--gold); border-bottom-color:var(--gol
 .mobile-menu a { padding:13px 0; font-size:15px; color:var(--text); text-decoration:none; border-bottom:1px solid var(--border); }
 .mobile-menu a:last-child { border-bottom:none; }
 .mobile-menu .nav-cta { background:none !important; color:var(--gold) !important; font-weight:700; border-bottom:none !important; }
+/* Lang switcher dentro del menú mobile */
+.mobile-lang-bar { display:flex; gap:8px; padding:14px 0 2px; border-top:1px solid var(--border); margin-top:6px; flex-wrap:wrap; }
+.mobile-lang-bar .lang-btn { flex:1; text-align:center; padding:9px 10px; font-size:13px; }
 
 /* ─── LANG SWITCHER ─── */
 .lang-switcher { display:flex; gap:5px; align-items:center; margin-left:12px; }
@@ -144,6 +147,10 @@ footer { background:var(--primary); color:rgba(255,255,255,.55); padding:52px 48
 }
 #wa-float:hover { transform:translateY(-4px); box-shadow:0 12px 32px rgba(37,211,102,.5); }
 #wa-float svg { width:22px; height:22px; flex-shrink:0; }
+@media(max-width:640px) {
+  #wa-float { padding:14px; border-radius:50%; bottom:20px; right:16px; }
+  #wa-float span { display:none; }
+}
 
 /* ─── PAGE HERO (páginas internas) ─── */
 .page-hero {
@@ -353,11 +360,20 @@ footer { background:var(--primary); color:rgba(255,255,255,.55); padding:52px 48
   .footer-links { flex-direction:column; gap:24px; }
   .form-row { grid-template-columns:1fr; }
   .destinos-page-grid { grid-template-columns:1fr; }
+  .exp-grid { grid-template-columns:1fr; }
+  .blog-grid { grid-template-columns:1fr; }
+  .exp-grid-wrap { grid-template-columns:1fr; }
   .dd-hero { height:280px; }
   .dd-hero-info { left:20px; bottom:20px; }
   .dd-gallery { grid-template-columns:repeat(2,1fr); }
-  .hero { min-height:380px; }
+  .hero { min-height:320px; }
+  .hero-content { padding:48px 20px; }
+  .hero-sub { font-size:15px; margin-bottom:28px; }
   .cta-sec { padding:56px 20px; }
+  .page-hero { padding:48px 20px 36px; }
+  .page-wrap, .nosotros-wrap, .destino-detail { padding:32px 16px; }
+  .post-wrap { padding:32px 16px; }
+  .contacto-wrap { padding:32px 16px; }
 }
 
 /* ════════════════════════════════════════════════════════
@@ -620,8 +636,8 @@ footer { background:var(--primary); color:rgba(255,255,255,.55); padding:52px 48
 .vd-carousel-dots { position:absolute; bottom:80px; left:50%; transform:translateX(-50%); display:flex; gap:8px; z-index:10; }
 .vd-dot { width:9px; height:9px; border-radius:50%; background:rgba(255,255,255,.45); cursor:pointer; transition:.25s; border:none; padding:0; }
 .vd-dot.active { background:#fff; transform:scale(1.2); }
-@media(max-width:960px) { .vd-carousel { height:320px; } .vd-carousel-dots { bottom:64px; } }
-@media(max-width:560px) { .vd-carousel { height:240px; } }
+@media(max-width:960px) { .vd-carousel { height:320px; } .vd-carousel-dots { bottom:58px; } }
+@media(max-width:560px) { .vd-carousel { height:220px; } .vd-carousel-dots { bottom:48px; } .vd-carousel-btn { width:36px; height:36px; font-size:20px; } }
 
 /* dcf-duracion badge en card */
 .dcf-duracion {

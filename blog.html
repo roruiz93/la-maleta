@@ -53,6 +53,7 @@
   <a href="./blog.html"        data-field="nav4">Blog</a>
   <a href="./contacto.html"    data-field="nav5">Contacto</a>
   <a href="./contacto.html"    data-field="nav-cta" class="nav-cta">Solicitá información</a>
+  <div id="lang-switcher" class="mobile-lang-bar"></div>
 </div>
 
 <div class="page-hero">
@@ -109,6 +110,12 @@
 <script src="./src/i18n-compat.js"></script>
 
 <script>
+  function ml(field) {
+    if (!field) return '';
+    const lang = window.getCurrentLang ? window.getCurrentLang() : 'es';
+    return typeof field === 'object' ? (field[lang] || field.es || '') : field;
+  }
+
   window.addEventListener("DOMContentLoaded", async () => {
     await waitForDependencies();
     initShared();
@@ -148,7 +155,7 @@
 
     // Contenido
     window.listenContent(data => {
-      if (data) applyLang(window.getCurrentLang());
+      if (data) { window.setSiteContent(data); applyLang(window.getCurrentLang()); }
     });
 
     // Funciones globales
@@ -172,7 +179,7 @@
   }
 
   function applyLang(lang, animate = false) {
-    const base = window.translations[lang] || window.translations["es"];
+    const base = window.getTexts(lang);
     document.querySelectorAll("[data-field]").forEach(el => {
       const val = base[el.dataset.field];
       if (val === undefined) return;
@@ -252,16 +259,17 @@
     container.innerHTML = _posts.map(post => {
       const fecha = new Date(post.fecha).toLocaleDateString(lang === 'en' ? 'en-US' : 'es-AR');
       const imagen = post.imagen || "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=600&q=80";
-      const resumen = post.resumen || (post.contenido || "").slice(0, 150);
+      const titulo = ml(post.titulo);
+      const resumen = ml(post.resumen) || ml(post.contenido).slice(0, 150);
 
       return `
         <article class="blog-card">
           <div class="blog-img">
-            <img src="${imagen}" alt="${post.titulo}" loading="lazy">
+            <img src="${imagen}" alt="${titulo}" loading="lazy">
           </div>
           <div class="blog-body">
             ${post.categoria ? `<span class="blog-cat">${post.categoria}</span>` : ''}
-            <div class="blog-title">${post.titulo}</div>
+            <div class="blog-title">${titulo}</div>
             <p class="blog-excerpt">${resumen}...</p>
             <div class="blog-meta">
               <span>${fecha}</span>

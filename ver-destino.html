@@ -38,6 +38,7 @@
   <a href="./blog.html" data-field="nav4">Blog</a>
   <a href="./contacto.html" data-field="nav5">Contacto</a>
   <a href="./contacto.html" class="nav-cta" data-field="nav-cta">Solicitá info</a>
+  <div id="lang-switcher" class="mobile-lang-bar"></div>
 </div>
 
 <!-- BREADCRUMB -->
@@ -136,7 +137,7 @@
 
     // Contenido
     window.listenContent(data => {
-      if (data) applyLang(window.getCurrentLang());
+      if (data) { window.setSiteContent(data); applyLang(window.getCurrentLang()); }
     });
 
     // Funciones globales
@@ -160,7 +161,7 @@
   }
 
   function applyLang(lang, animate = false) {
-    const base = window.translations[lang] || window.translations["es"];
+    const base = window.getTexts(lang);
     document.querySelectorAll("[data-field]").forEach(el => {
       const val = base[el.dataset.field];
       if (val === undefined) return;
@@ -220,6 +221,12 @@
 
   let _vdDestino = null, _vdWrap = null, _vdNum = "5491100000000", _vdMsg = "";
 
+  function ml(field) {
+    if (!field) return '';
+    const lang = window.getCurrentLang ? window.getCurrentLang() : 'es';
+    return typeof field === 'object' ? (field[lang] || field.es || '') : field;
+  }
+
   async function initVerDestino() {
     const id = new URLSearchParams(location.search).get("id");
     if (!id) { location.href = "./destinos.html"; return; }
@@ -235,14 +242,14 @@
     if (!d || d.activo === false) { location.href = "./destinos.html"; return; }
 
     _vdDestino = d;
-    document.title = `${d.nombre} — Viajes La Maleta`;
+    document.title = `${ml(d.nombre)} — Viajes La Maleta`;
 
     const bc = document.getElementById("bc-nombre");
-    if (bc) bc.textContent = d.nombre;
+    if (bc) bc.textContent = ml(d.nombre);
 
     window.listenSettings(s => {
       _vdNum = s.whatsapp || "5491100000000";
-      _vdMsg = `Hola, quiero información sobre el viaje a ${d.nombre}`;
+      _vdMsg = `Hola, quiero información sobre el viaje a ${ml(d.nombre)}`;
       renderDestino(d, wrap, _vdNum, _vdMsg);
     });
   }
@@ -264,6 +271,8 @@
   window.vdCarousel = function(dir) { window.vdGoTo(window._vdIdx + dir); };
 
   function renderDestino(d, wrap, num, msg) {
+    const nombre = ml(d.nombre);
+    const descripcion = ml(d.descripcion) || ml(d.descripcionCorta) || window.t('vd-desc-default');
     const imagenes = d.imagenes && d.imagenes.length
       ? d.imagenes
       : ["https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80"];
@@ -278,7 +287,7 @@
       <div class="vd-hero-ov"></div>
       <div class="vd-hero-info">
         <span class="vd-tag">${d.categoria || window.t('breadcrumb-destino')}</span>
-        <h1>${d.nombre}</h1>
+        <h1>${nombre}</h1>
         <div class="vd-meta">
           <span>💰 desde $${precio}</span>
           ${d.duracion ? `<span>📅 ${d.duracion}</span>` : ''}
@@ -290,7 +299,7 @@
         <div class="vd-carousel-track" id="vd-track">
           ${imagenes.map(img => `
             <div class="vd-carousel-slide">
-              <img src="${img}" alt="${d.nombre}" onerror="this.src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80'">
+              <img src="${img}" alt="${nombre}" onerror="this.src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80'">
             </div>`).join('')}
         </div>
         <button class="vd-carousel-btn prev" onclick="vdCarousel(-1)">&#8249;</button>
@@ -301,16 +310,16 @@
         ${heroInfo}
       </div>` : `
       <div class="vd-hero">
-        <img src="${imagenes[0]}" alt="${d.nombre}">
+        <img src="${imagenes[0]}" alt="${nombre}">
         ${heroInfo}
       </div>`;
 
     const galeriaHtml = imagenes.length > 1 ? `
       <div class="vd-section">
-        <h2>Galería</h2>
+        <h2>${window.t('vd-galeria')}</h2>
         <div class="vd-galeria">
           ${imagenes.map((img, i) => `
-            <img src="${img}" alt="${d.nombre} ${i+1}" loading="lazy"
+            <img src="${img}" alt="${nombre} ${i+1}" loading="lazy"
               onclick="vdGoTo(${i}); window.scrollTo({top:0,behavior:'smooth'})"
               onerror="this.src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80'">
           `).join('')}
@@ -324,7 +333,7 @@
           <div>
             <div class="vd-section">
               <h2>${window.t('vd-descripcion')}</h2>
-              <p>${d.descripcion || d.descripcionCorta || window.t('vd-desc-default')}</p>
+              <p>${descripcion}</p>
             </div>
             <div class="vd-section">
               <h2>${window.t('vd-incluye')}</h2>
