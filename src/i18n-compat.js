@@ -54,7 +54,7 @@ const es = {
   "vd-info-consultar": "Información a consultar", "vd-duracion-default": "Duración a consultar",
   "vd-desc-default": "Descripción no disponible.",
   "vd-cta-h": "¿Te interesa este destino?", "vd-cta-p": "Contactanos para más información y reservas",
-  "vd-whatsapp-btn": "Contactar por WhatsApp", "precio-desde": "desde {precio}", "precio-consultar": "Consultar precio", "vd-precio-persona": "precio por persona",
+  "vd-whatsapp-btn": "Contactar por WhatsApp", "precio-desde": "desde {precio}", "precio-consultar": "Consultar precio", "vd-incluidos": "incluidos", "vd-precio-persona": "precio por persona",
   "vd-galeria": "Galería",
   "destinos-ver-btn": "Ver destino →",
   "filtro-todos": "Todos",
@@ -131,7 +131,7 @@ const ca = {
   "vd-info-consultar": "Informació a consultar", "vd-duracion-default": "Durada a consultar",
   "vd-desc-default": "Descripció no disponible.",
   "vd-cta-h": "T'interessa aquesta destinació?", "vd-cta-p": "Contacta'ns per a més informació i reserves",
-  "vd-whatsapp-btn": "Contactar per WhatsApp", "precio-desde": "des de {precio}", "precio-consultar": "Consultar preu", "vd-precio-persona": "preu per persona",
+  "vd-whatsapp-btn": "Contactar per WhatsApp", "precio-desde": "des de {precio}", "precio-consultar": "Consultar preu", "vd-incluidos": "inclosos", "vd-precio-persona": "preu per persona",
   "vd-galeria": "Galeria",
   "destinos-ver-btn": "Veure destinació →",
   "filtro-todos": "Tots",
@@ -208,7 +208,7 @@ const en = {
   "vd-info-consultar": "Information to be consulted", "vd-duracion-default": "Duration to be confirmed",
   "vd-desc-default": "Description not available.",
   "vd-cta-h": "Interested in this destination?", "vd-cta-p": "Contact us for more information and bookings",
-  "vd-whatsapp-btn": "Contact via WhatsApp", "precio-desde": "from {precio}", "precio-consultar": "Price on request", "vd-precio-persona": "price per person",
+  "vd-whatsapp-btn": "Contact via WhatsApp", "precio-desde": "from {precio}", "precio-consultar": "Price on request", "vd-incluidos": "included", "vd-precio-persona": "price per person",
   "vd-galeria": "Gallery",
   "destinos-ver-btn": "See destination →",
   "filtro-todos": "All",
@@ -254,6 +254,21 @@ window.getTexts = function(lang) {
     });
   });
   return { ...base, ...editados };
+};
+
+// ── Campos multi-idioma de destinos ──────────────────────
+// Texto: string (formato viejo, en español) o { es, en, ca }.
+window.mlTexto = function(field) {
+  if (!field) return '';
+  if (typeof field !== 'object') return field;
+  return field[window.getCurrentLang()] || field.es || '';
+};
+// Lista (ej. "incluye"): array (formato viejo) o { es:[...], en:[...], ca:[...] }.
+window.mlLista = function(field) {
+  if (!field) return [];
+  if (Array.isArray(field)) return field;
+  const l = field[window.getCurrentLang()];
+  return Array.isArray(l) && l.length ? l : (Array.isArray(field.es) ? field.es : []);
 };
 
 // ── Precios (euros) ───────────────────────────────────────

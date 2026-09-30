@@ -17,7 +17,7 @@
   } catch(e) {}
 </script>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="./src/style.css?v=202609300651">
+<link rel="stylesheet" href="./src/style.css?v=202609300656">
 <script>try{var _wc=JSON.parse(localStorage.getItem('web_colors')||'null');if(_wc)Object.entries(_wc).forEach(function(e){document.documentElement.style.setProperty(e[0],e[1]);});}catch(e){}</script>
 </head>
 <body>
@@ -108,9 +108,9 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
 <!-- Scripts locales sin imports -->
-<script src="./src/firebase-config.js?v=202609300651"></script>
-<script src="./src/firebase-compat.js?v=202609300651"></script>
-<script src="./src/i18n-compat.js?v=202609300651"></script>
+<script src="./src/firebase-config.js?v=202609300656"></script>
+<script src="./src/firebase-compat.js?v=202609300656"></script>
+<script src="./src/i18n-compat.js?v=202609300656"></script>
 
 <script>
   let todos = [];
@@ -176,8 +176,10 @@
       document.documentElement.lang = c;
       applyLang(c, true);
       buildLangSwitcher();
+      // Las categorías cambian con el idioma: volver a "todos"
+      filtro = "todos";
       renderFiltros();
-      renderGrid(filtro === "todos" ? todos : todos.filter(d => d.categoria === filtro));
+      renderGrid(todos);
     };
     window.toggleMenu = () => document.getElementById("mobile-menu")?.classList.toggle("open");
   }
@@ -247,10 +249,10 @@
   function renderFiltros() {
     const wrap = document.getElementById("filtros");
     if (!wrap) return;
-    const cats = ["todos", ...new Set(todos.map(d => d.categoria).filter(Boolean))];
+    const cats = ["todos", ...new Set(todos.map(d => window.mlTexto(d.categoria)).filter(Boolean))];
     if (cats.length <= 2) { wrap.innerHTML = ""; return; }
     wrap.innerHTML = cats.map(c => `
-      <button class="filtro-btn ${c === filtro ? "active" : ""}" onclick="filtrarDest('${c}')">
+      <button class="filtro-btn ${c === filtro ? "active" : ""}" data-cat="${c.replace(/"/g, '&quot;')}" onclick="filtrarDest(this.dataset.cat)">
         ${c === "todos" ? window.t('filtro-todos') : c}
       </button>`).join("");
   }
@@ -258,7 +260,7 @@
   window.filtrarDest = function(cat) {
     filtro = cat;
     renderFiltros();
-    renderGrid(cat === "todos" ? todos : todos.filter(d => d.categoria === cat));
+    renderGrid(cat === "todos" ? todos : todos.filter(d => window.mlTexto(d.categoria) === cat));
   };
 
   // ─── Grilla de cards ──────────────────────────────────────
@@ -287,7 +289,7 @@
       <a class="destino-card-full" href="./ver-destino.html?id=${d.id}">
         <div class="dcf-img">
           <img src="${img}" alt="${nombre}" loading="lazy">
-          ${d.categoria ? `<span class="dcf-badge">${d.categoria}</span>` : ""}
+          ${window.mlTexto(d.categoria) ? `<span class="dcf-badge">${window.mlTexto(d.categoria)}</span>` : ""}
         </div>
         <div class="dcf-body">
           <div class="dcf-name">${nombre}</div>
