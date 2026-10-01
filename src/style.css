@@ -650,3 +650,28 @@ footer { background:var(--primary); color:rgba(255,255,255,.55); padding:52px 48
 /* ─── Logo del sitio (Configuración → Logo) ─── */
 .site-logo-img { height: 44px; width: auto; max-width: 200px; object-fit: contain; display: block; }
 .site-logo-footer { height: 40px; margin-bottom: 8px; }
+
+/* ─── Páginas legales ─── */
+.footer-legal { display:flex; flex-wrap:wrap; gap:6px 18px; justify-content:center; margin-top:10px; }
+.footer-legal a { color:inherit; opacity:.75; font-size:12px; text-decoration:none; }
+.footer-legal a:hover { opacity:1; text-decoration:underline; }
+.page-hero-legal { padding-bottom:36px; }
+.legal-wrap { max-width:860px; }
+.legal-tabs { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:24px; }
+.legal-tabs a { padding:8px 14px; border:1.5px solid var(--gold); border-radius:20px; font-size:13px; color:var(--text); text-decoration:none; cursor:pointer; }
+.legal-tabs a.active, .legal-tabs a:hover { background:var(--gold); color:#fff; }
+.legal-aviso-idioma { background:var(--card-bg); border-left:3px solid var(--gold); padding:10px 14px; font-size:13px; margin-bottom:20px; }
+.legal-contenido { line-height:1.7; font-size:15px; }
+.legal-contenido h2 { font-family:'Playfair Display',serif; font-size:22px; margin:32px 0 10px; color:var(--primary); }
+.legal-contenido p, .legal-contenido ul { margin-bottom:12px; }
+.legal-contenido ul { padding-left:22px; }
+.legal-contenido li { margin-bottom:6px; }
+.legal-contenido a { color:var(--gold); }
+.legal-tabla { width:100%; border-collapse:collapse; margin:12px 0 18px; font-size:13px; }
+.legal-tabla th, .legal-tabla td { border:1px solid rgba(0,0,0,.12); padding:8px 10px; text-align:left; vertical-align:top; }
+.legal-tabla th { background:var(--card-bg); }
+@media (max-width:640px) { .legal-tabla { display:block; overflow-x:auto; } }
+.form-consent { display:flex; gap:10px; align-items:flex-start; font-size:13px; margin:14px 0 8px; cursor:pointer; line-height:1.4; }
+.form-consent input { margin-top:3px; width:auto; flex-shrink:0; }
+.form-consent a { color:var(--gold); }
+.form-rgpd { font-size:11px; opacity:.7; line-height:1.5; margin-bottom:14px; }

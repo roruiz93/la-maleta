@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Experiencias — Viajes La Maleta</title>
-<meta name="description" content="Experiencias únicas: trekking, buceo, gastronomía, cultura y mucho más.">
+<title>Información legal — Viajes La Maleta</title>
+<meta name="description" content="Aviso legal, política de privacidad, política de cookies y condiciones generales de reserva de Viajes La Maleta.">
 <script>
   try {
     const c = JSON.parse(localStorage.getItem("lm_colors") || "{}");
@@ -37,7 +37,7 @@
   </a>
   <nav>
     <a href="./destinos.html"    data-field="nav1">Destinos</a>
-    <a href="./informacion.html" data-field="nav2" class="nav-active">Experiencias</a>
+    <a href="./informacion.html" data-field="nav2">Experiencias</a>
     <a href="./nosotros.html"    data-field="nav3">Nosotros</a>
     <a href="./blog.html"        data-field="nav4">Blog</a>
     <a href="./contacto.html"    data-field="nav5">Contacto</a>
@@ -56,19 +56,25 @@
   <div id="lang-switcher" class="mobile-lang-bar"></div>
 </div>
 
-<div class="page-hero">
-  <span class="page-hero-tag" data-field="exp-hero-tag">Lo que ofrecemos</span>
-  <h1 data-field="exp-hero-h1">Experiencias Únicas</h1>
-  <p data-field="exp-hero-p">Más que un viaje — momentos que recordarás toda la vida.</p>
+<div class="page-hero page-hero-legal">
+  <span class="page-hero-tag" data-field="legal-tag">Información legal</span>
+  <h1 id="legal-titulo"></h1>
 </div>
 <div class="breadcrumb">
-  <a href="./index.html" data-field="breadcrumb-inicio">Inicio</a><span>›</span><span data-field="breadcrumb-experiencias">Experiencias</span>
+  <a href="./index.html" data-field="breadcrumb-inicio">Inicio</a><span>›</span><span id="legal-bc"></span>
 </div>
 
-<div class="page-wrap">
-  <div id="exp-grid" class="exp-grid">
-    <div class="loading"><div class="spinner"></div><span data-field="loading-experiencias">Cargando experiencias...</span></div>
-  </div>
+<div class="page-wrap legal-wrap">
+  <nav class="legal-tabs" id="legal-tabs">
+    <a data-doc="aviso-legal" data-field="legal-aviso">Aviso legal</a>
+    <a data-doc="privacidad" data-field="legal-privacidad">Política de privacidad</a>
+    <a data-doc="cookies" data-field="legal-cookies">Política de cookies</a>
+    <a data-doc="condiciones" data-field="legal-condiciones">Condiciones de reserva</a>
+  </nav>
+  <p class="legal-aviso-idioma" id="legal-aviso-idioma" data-field="legal-solo-es" hidden>Este texto legal está disponible solo en castellano.</p>
+  <article class="legal-contenido" id="legal-contenido">
+    <div class="loading"><div class="spinner"></div></div>
+  </article>
 </div>
 
 <footer id="footer-main">
@@ -125,7 +131,7 @@
   window.addEventListener("DOMContentLoaded", async () => {
     await waitForDependencies();
     initShared();
-    iniciarListenerExperiencias();
+    cargarLegal();
   });
 
   function waitForDependencies() {
@@ -171,7 +177,7 @@
       applyLang(c, true);
       window.refreshContactInfo();
       buildLangSwitcher();
-      window.renderExperiencias();
+      actualizarTituloLegal();
     };
     window.toggleMenu = () => document.getElementById("mobile-menu")?.classList.toggle("open");
   }
@@ -232,49 +238,37 @@
     window.applySiteLogo(s.logoUrl);
   }
 
-  let _expActivas = [];
+  // ─── Documentos legales (textos en ./legal/*.html, solo en castellano) ───
+  const DOCS = ["aviso-legal", "privacidad", "cookies", "condiciones"];
+  const CLAVE_TITULO = { "aviso-legal": "legal-aviso", privacidad: "legal-privacidad", cookies: "legal-cookies", condiciones: "legal-condiciones" };
+  let docActual = "aviso-legal";
 
-  function iniciarListenerExperiencias() {
-    window.listenExperiencias(items => {
-      _expActivas = items.filter(exp => exp.activo !== false);
-      renderExperiencias();
-    });
+  function actualizarTituloLegal() {
+    const titulo = window.t(CLAVE_TITULO[docActual]);
+    document.getElementById("legal-titulo").textContent = titulo;
+    document.getElementById("legal-bc").textContent = titulo;
+    document.title = titulo + " — Viajes La Maleta";
+    document.getElementById("legal-aviso-idioma").hidden = window.getCurrentLang() === "es";
   }
 
-  window.renderExperiencias = function renderExperiencias() {
-    const container = document.getElementById("exp-grid");
-    if (!container) return;
-
-    if (!_expActivas.length) {
-      container.innerHTML = `<div class="empty-state"><p>${window.t('exp-empty')}</p></div>`;
-      return;
+  async function cargarLegal() {
+    const pedido = new URLSearchParams(location.search).get("doc");
+    docActual = DOCS.includes(pedido) ? pedido : "aviso-legal";
+    document.querySelectorAll("#legal-tabs a").forEach(a => {
+      a.href = "./legal.html?doc=" + a.dataset.doc;
+      a.classList.toggle("active", a.dataset.doc === docActual);
+    });
+    actualizarTituloLegal();
+    const cont = document.getElementById("legal-contenido");
+    try {
+      const res = await fetch("./legal/" + docActual + ".html", { cache: "no-cache" });
+      if (!res.ok) throw new Error(res.status);
+      cont.innerHTML = await res.text();
+      cont.querySelectorAll("[data-sitio]").forEach(el => { el.textContent = location.origin; });
+    } catch (e) {
+      cont.innerHTML = "<p>No se pudo cargar el documento. Escribinos a viajes@viajeslamaleta.com.</p>";
     }
-
-    const lang = window.getCurrentLang();
-    const ml = (field) => {
-      if (!field) return '';
-      return typeof field === 'object' ? (field[lang] || field.es || '') : field;
-    };
-
-    container.innerHTML = _expActivas.map(exp => {
-      const imagen = exp.imagen || "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80";
-      const categoria = exp.categoria || window.t('exp-categoria-default');
-
-      return `
-        <div class="exp-card">
-          <div class="exp-img">
-            <img src="${imagen}" alt="${ml(exp.nombre)}" onerror="this.src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80'">
-          </div>
-          <div class="exp-body">
-            <span class="exp-tag">${categoria}</span>
-            <div class="exp-name">${ml(exp.nombre)}</div>
-            <p class="exp-desc">${ml(exp.descripcion)}</p>
-            <button class="exp-btn">${window.t('exp-solicitar')}</button>
-          </div>
-        </div>
-      `;
-    }).join("");
-  };
+  }
 </script>
 </body>
 </html>

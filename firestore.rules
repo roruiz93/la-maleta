@@ -34,7 +34,7 @@ service cloud.firestore {
       return !(k in d) || strOk(d[k], 0, maxLen);
     }
     function consultaValida(d) {
-      return d.keys().hasOnly(['nombre','email','tel','asunto','mensaje','origen','destino','leida','fecha'])
+      return d.keys().hasOnly(['nombre','email','tel','asunto','mensaje','origen','destino','leida','fecha','acepta'])
         && strOk(d.nombre, 2, 100)
         && strOk(d.email, 5, 200)
         && d.email.matches('^[^@ ]+@[^@ ]+[.][^@ ]+$')
@@ -44,6 +44,8 @@ service cloud.firestore {
         && optStr(d, 'origen', 30)
         && optStr(d, 'destino', 150)
         && d.leida == false
+        // Consentimiento RGPD (casilla de la política de privacidad)
+        && d.acepta == true
         && strOk(d.fecha, 10, 40);
     }
 
