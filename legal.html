@@ -177,7 +177,7 @@
       applyLang(c, true);
       window.refreshContactInfo();
       buildLangSwitcher();
-      actualizarTituloLegal();
+      cargarLegal();
     };
     window.toggleMenu = () => document.getElementById("mobile-menu")?.classList.toggle("open");
   }
@@ -238,17 +238,25 @@
     window.applySiteLogo(s.logoUrl);
   }
 
-  // ─── Documentos legales (textos en ./legal/*.html, solo en castellano) ───
+  // ─── Documentos legales: ./legal/*.html (castellano) y ./legal/ca|en/*.html ───
   const DOCS = ["aviso-legal", "privacidad", "cookies", "condiciones"];
   const CLAVE_TITULO = { "aviso-legal": "legal-aviso", privacidad: "legal-privacidad", cookies: "legal-cookies", condiciones: "legal-condiciones" };
   let docActual = "aviso-legal";
+  let pedidoLegal = 0;
 
   function actualizarTituloLegal() {
     const titulo = window.t(CLAVE_TITULO[docActual]);
     document.getElementById("legal-titulo").textContent = titulo;
     document.getElementById("legal-bc").textContent = titulo;
     document.title = titulo + " — Viajes La Maleta";
-    document.getElementById("legal-aviso-idioma").hidden = window.getCurrentLang() === "es";
+  }
+
+  // Pide la versión del idioma; si falla, muestra la castellana con el aviso.
+  async function pedirLegal(lang) {
+    const ruta = "./legal/" + (lang === "es" ? "" : lang + "/") + docActual + ".html";
+    const res = await fetch(ruta, { cache: "no-cache" });
+    if (!res.ok) throw new Error(res.status);
+    return res.text();
   }
 
   async function cargarLegal() {
@@ -260,10 +268,20 @@
     });
     actualizarTituloLegal();
     const cont = document.getElementById("legal-contenido");
+    const aviso = document.getElementById("legal-aviso-idioma");
+    const lang = window.getCurrentLang();
+    const n = ++pedidoLegal;
+    aviso.hidden = true;
     try {
-      const res = await fetch("./legal/" + docActual + ".html", { cache: "no-cache" });
-      if (!res.ok) throw new Error(res.status);
-      cont.innerHTML = await res.text();
+      let html;
+      try { html = await pedirLegal(lang); }
+      catch (e) {
+        if (lang === "es") throw e;
+        html = await pedirLegal("es");
+        aviso.hidden = false;
+      }
+      if (n !== pedidoLegal) return; // cambió el idioma mientras cargaba
+      cont.innerHTML = html;
       cont.querySelectorAll("[data-sitio]").forEach(el => { el.textContent = location.origin; });
     } catch (e) {
       cont.innerHTML = "<p>No se pudo cargar el documento. Escribinos a viajes@viajeslamaleta.com.</p>";
