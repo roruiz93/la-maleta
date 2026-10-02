@@ -282,7 +282,6 @@
       }
       if (n !== pedidoLegal) return; // cambió el idioma mientras cargaba
       cont.innerHTML = html;
-      cont.querySelectorAll("[data-sitio]").forEach(el => { el.textContent = location.origin; });
     } catch (e) {
       cont.innerHTML = "<p>No se pudo cargar el documento. Escribinos a viajes@viajeslamaleta.com.</p>";
     }
