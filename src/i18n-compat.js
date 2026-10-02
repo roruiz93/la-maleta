@@ -341,7 +341,8 @@ window.waUrl = function(numero, mensaje) {
 // El horario puede venir en 3 idiomas ({ es, ca, en }) o como texto (español).
 let contactoActual = null;
 window.applyContactInfo = function(s) {
-  contactoActual = { tel: s.tel || '', email: s.email || '', addr: s.addr || '', hours: s.hours || '' };
+  contactoActual = { tel: s.tel || '', email: s.email || '', addr: s.addr || '', hours: s.hours || '',
+                     instagram: s.instagram || '', facebook: s.facebook || '' };
   try { localStorage.setItem('web_contacto', JSON.stringify(contactoActual)); } catch (e) {}
   window.refreshContactInfo();
 };
@@ -353,7 +354,41 @@ window.refreshContactInfo = function() {
   document.querySelectorAll('[data-contacto]').forEach(el => {
     el.textContent = valor(el.dataset.contacto) || '';
   });
+  aplicarRedes();
 };
+
+// ── Redes sociales (Configuración → Redes sociales) ───────
+// Íconos de Instagram y Facebook en el pie, debajo del contacto. Cada uno se
+// muestra solo si hay un enlace válido (https a instagram.com / facebook.com).
+const REDES = {
+  instagram: {
+    nombre: 'Instagram', dominio: /^https:\/\/(www\.)?instagram\.com\//i,
+    svg: '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none"/></svg>'
+  },
+  facebook: {
+    nombre: 'Facebook', dominio: /^https:\/\/((www|m|web)\.)?facebook\.com\//i,
+    svg: '<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M13.5 21v-7.5h2.5l.4-3h-2.9V8.6c0-.9.3-1.5 1.5-1.5h1.6V4.4c-.3 0-1.2-.1-2.3-.1-2.3 0-3.8 1.4-3.8 3.9v2.3H8v3h2.5V21h3z"/></svg>'
+  }
+};
+function aplicarRedes() {
+  const col = document.querySelector('footer [data-contacto]')?.parentElement;
+  if (!col) return;
+  let cont = col.querySelector('.footer-redes');
+  const enlaces = Object.entries(REDES)
+    .map(([k, r]) => ({ k, r, url: String(contactoActual[k] || '').trim() }))
+    .filter(x => x.r.dominio.test(x.url));
+  if (!enlaces.length) { cont?.remove(); return; }
+  if (!cont) { cont = document.createElement('div'); cont.className = 'footer-redes'; col.appendChild(cont); }
+  cont.innerHTML = '';
+  enlaces.forEach(({ k, r, url }) => {
+    const a = document.createElement('a');
+    a.href = url; a.target = '_blank'; a.rel = 'noopener';
+    a.className = 'footer-red footer-red-' + k;
+    a.setAttribute('aria-label', r.nombre); a.title = r.nombre;
+    a.innerHTML = r.svg;
+    cont.appendChild(a);
+  });
+}
 
 document.addEventListener && document.addEventListener('DOMContentLoaded', () => {
   try {
