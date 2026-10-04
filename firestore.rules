@@ -58,8 +58,15 @@ service cloud.firestore {
     }
 
     // Usuarios
+    // Cualquiera puede crearse una cuenta con la API pública de Auth: estar
+    // logueado no alcanza. Cada uno lee su perfil (el login busca su rol), el
+    // superadmin lee todos y el admin solo los editores (renderUsuarios).
     match /users/{uid} {
-      allow read:   if isLoggedIn();
+      allow read:   if isLoggedIn() && (
+        request.auth.uid == uid
+        || isSuperAdmin()
+        || (isAdmin() && resource.data.role == 'editor')
+      );
       allow create: if request.resource.data.keys().hasOnly(['email','name','role','createdAt'])
         && (
           (isSuperAdmin() && request.resource.data.role in ['editor','admin','superadmin'])
