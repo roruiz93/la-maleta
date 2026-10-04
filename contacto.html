@@ -211,10 +211,11 @@
 <!-- Firebase CDN -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 
 <!-- Scripts locales sin imports -->
 <script src="./src/firebase-config.js?v=202610011512"></script>
-<script src="./src/firebase-compat.js?v=202610011512"></script>
+<script src="./src/firebase-compat.js?v=202610032220"></script>
 <script src="./src/i18n-compat.js?v=202610032212"></script>
 
 <script>
@@ -340,8 +341,10 @@
 
   // ─── Formulario de contacto ─────────────────────────────
   // Los datos se guardan como texto plano: el admin los escapa al mostrarlos
-  // y firestore.rules valida campos, tipos y tamaños.
-  const CONTACTO_LIMITE = 3;                 // envíos...
+  // y firestore.rules valida campos, tipos y tamaños. El límite real lo ponen
+  // las reglas (1 envío cada 10 min por visitante, con sesión anónima); este
+  // control en el navegador solo evita un viaje al servidor que va a fallar.
+  const CONTACTO_LIMITE = 1;                 // envíos...
   const CONTACTO_VENTANA = 10 * 60 * 1000;   // ...cada 10 minutos por navegador
   let contactoAbierto = Date.now();
 
@@ -414,7 +417,9 @@
       if (acepta) acepta.checked = false;
       btn.innerHTML = textoBtn;
     } catch (e) {
-      mostrarErrContacto("form-err-send");
+      // Las reglas rechazan un segundo envío antes de 10 minutos
+      const limite = e?.code === "permission-denied" || e?.code === "auth/too-many-requests";
+      mostrarErrContacto(limite ? "form-err-rate" : "form-err-send");
       btn.innerHTML = textoBtn;
     } finally {
       btn.disabled = false;

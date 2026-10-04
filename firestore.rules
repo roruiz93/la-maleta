@@ -34,7 +34,8 @@ service cloud.firestore {
       return !(k in d) || strOk(d[k], 0, maxLen);
     }
     function consultaValida(d) {
-      return d.keys().hasOnly(['nombre','email','tel','asunto','mensaje','origen','destino','leida','fecha','acepta'])
+      return d.keys().hasOnly(['nombre','email','tel','asunto','mensaje','origen','destino','leida','fecha','acepta','uid'])
+        && d.uid == request.auth.uid
         && strOk(d.nombre, 2, 100)
         && strOk(d.email, 5, 200)
         && d.email.matches('^[^@ ]+@[^@ ]+[.][^@ ]+$')
@@ -49,12 +50,33 @@ service cloud.firestore {
         && strOk(d.fecha, 10, 40);
     }
 
+    // Límite de envíos: el visitante inicia una sesión anónima y la consulta se
+    // crea en el mismo lote que limites/{uid}, que apunta a ella. Ese registro
+    // solo se renueva pasados 10 minutos → 1 consulta cada 10 min por visitante
+    // (y no se pueden colar varias consultas en un mismo lote).
+    function limiteAfter() {
+      return getAfter(/databases/$(database)/documents/limites/$(request.auth.uid)).data;
+    }
     match /consultas/{id} {
-      allow create: if id.matches('consulta_[0-9]{10,16}') && consultaValida(request.resource.data);
+      allow create: if request.auth != null
+        && id.matches('consulta_[0-9]{10,16}')
+        && consultaValida(request.resource.data)
+        && limiteAfter().consulta == id
+        && limiteAfter().ultimo == request.time;
       allow read, delete: if isEditor();
       // El admin solo marca como leída
       allow update: if isEditor()
         && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['leida']);
+    }
+
+    match /limites/{uid} {
+      allow create, update: if request.auth != null && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly(['ultimo', 'consulta'])
+        && request.resource.data.ultimo == request.time
+        && request.resource.data.consulta is string
+        && request.resource.data.consulta.matches('consulta_[0-9]{10,16}')
+        && existsAfter(/databases/$(database)/documents/consultas/$(request.resource.data.consulta))
+        && (resource == null || request.time > resource.data.ultimo + duration.value(10, 'm'));
     }
 
     // Usuarios

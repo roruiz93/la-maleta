@@ -140,13 +140,27 @@ window.listenPosts = function(callback) {
 // ─────────────────────────────
 // CONSULTAS
 // ─────────────────────────────
+// Solo en contacto.html (carga firebase-auth-compat). El visitante inicia una
+// sesión anónima y la consulta se guarda en un lote con limites/{uid}: las
+// reglas permiten 1 consulta cada 10 minutos por visitante.
 window.saveConsulta = async function(data) {
+  const auth = firebase.auth();
+  // Esperar a que Auth recupere la sesión guardada antes de crear otra
+  let user = await new Promise(ok => { const fin = auth.onAuthStateChanged(u => { fin(); ok(u); }); });
+  if (!user) user = (await auth.signInAnonymously()).user;
   const id = `consulta_${Date.now()}`;
-  await db.collection("consultas").doc(id).set({
+  const lote = db.batch();
+  lote.set(db.collection("consultas").doc(id), {
     ...data,
+    uid: user.uid,
     leida: false,
     fecha: new Date().toISOString()
   });
+  lote.set(db.collection("limites").doc(user.uid), {
+    ultimo: firebase.firestore.FieldValue.serverTimestamp(),
+    consulta: id
+  });
+  await lote.commit();
   return id;
 };
 
