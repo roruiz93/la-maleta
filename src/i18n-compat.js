@@ -267,6 +267,37 @@ window.setCurrentLang = function(lang) {
 // Helper function to get translation
 // Textos editados desde el admin (Firestore site/content). Pisan a los
 // textos por defecto de arriba, salvo los campos guardados vacíos.
+// ── HTML seguro ───────────────────────────────────────────
+// Lo que viene de Firestore lo escribe el equipo desde el admin, pero si se
+// roba una cuenta no debe poder inyectar código en la web pública.
+// escHtml: para datos (destinos, experiencias, posts) — todo como texto.
+window.escHtml = v => String(v ?? '').replace(/[&<>"']/g, ch =>
+  ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+// htmlSeguro: para los textos editables, que pueden traer <br> o negritas.
+// Deja solo etiquetas de formato, sin atributos; el resto queda como texto
+// (script/style/iframe se descartan). El <template> no ejecuta ni carga nada.
+const ETIQUETAS_OK = new Set(['BR', 'B', 'STRONG', 'I', 'EM', 'U', 'SMALL', 'SPAN']);
+const ETIQUETAS_FUERA = new Set(['SCRIPT', 'STYLE', 'IFRAME', 'OBJECT', 'EMBED', 'TEMPLATE', 'NOSCRIPT']);
+window.htmlSeguro = function(v) {
+  const s = String(v ?? '');
+  if (!s.includes('<')) return s;
+  const tpl = document.createElement('template');
+  tpl.innerHTML = s;
+  (function limpiar(nodo) {
+    [...nodo.childNodes].forEach(n => {
+      if (n.nodeType === Node.ELEMENT_NODE) {
+        limpiar(n);
+        if (ETIQUETAS_FUERA.has(n.tagName)) n.remove();
+        else if (!ETIQUETAS_OK.has(n.tagName)) n.replaceWith(...n.childNodes);
+        else [...n.attributes].forEach(a => n.removeAttribute(a.name));
+      } else if (n.nodeType !== Node.TEXT_NODE) {
+        n.remove();
+      }
+    });
+  })(tpl.content);
+  return tpl.innerHTML;
+};
+
 let siteContent = {};
 
 window.setSiteContent = function(data) {
@@ -278,7 +309,7 @@ window.getTexts = function(lang) {
   const editados = {};
   [siteContent[lang] || {}, preview.lang === lang ? preview.texts : {}].forEach(capa => {
     Object.entries(capa).forEach(([k, v]) => {
-      if (typeof v === 'string' && v.trim()) editados[k] = v;
+      if (typeof v === 'string' && v.trim()) editados[k] = window.htmlSeguro(v);
     });
   });
   return { ...base, ...editados };

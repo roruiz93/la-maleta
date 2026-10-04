@@ -162,7 +162,7 @@
 <!-- Scripts locales sin imports -->
 <script src="./src/firebase-config.js?v=202610011512"></script>
 <script src="./src/firebase-compat.js?v=202610011512"></script>
-<script src="./src/i18n-compat.js?v=202610012319"></script>
+<script src="./src/i18n-compat.js?v=202610032212"></script>
 
 <script>
   let _destinosIds = [];
@@ -325,11 +325,11 @@
       return `
         <div class="dc">
           <div class="dc-img">
-            <img src="${imgSrc}" alt="${nombre}" onerror="this.src='https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=600&q=80'">
+            <img src="${window.escHtml(imgSrc)}" alt="${window.escHtml(nombre)}" onerror="this.src='https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=600&q=80'">
           </div>
           <div class="dc-body">
-            <div class="dc-name">${nombre}</div>
-            <div class="dc-desc">${descripcionCompleta}</div>
+            <div class="dc-name">${window.escHtml(nombre)}</div>
+            <div class="dc-desc">${window.escHtml(descripcionCompleta)}</div>
             <button class="ver-btn" onclick="irDestino(${index})">Ver más</button>
           </div>
         </div>

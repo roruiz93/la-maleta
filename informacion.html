@@ -113,7 +113,7 @@
 <!-- Scripts locales sin imports -->
 <script src="./src/firebase-config.js?v=202610011512"></script>
 <script src="./src/firebase-compat.js?v=202610011512"></script>
-<script src="./src/i18n-compat.js?v=202610012319"></script>
+<script src="./src/i18n-compat.js?v=202610032212"></script>
 
 <script>
   function ml(field) {
@@ -263,12 +263,12 @@
       return `
         <div class="exp-card">
           <div class="exp-img">
-            <img src="${imagen}" alt="${ml(exp.nombre)}" onerror="this.src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80'">
+            <img src="${window.escHtml(imagen)}" alt="${window.escHtml(ml(exp.nombre))}" onerror="this.src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80'">
           </div>
           <div class="exp-body">
-            <span class="exp-tag">${categoria}</span>
-            <div class="exp-name">${ml(exp.nombre)}</div>
-            <p class="exp-desc">${ml(exp.descripcion)}</p>
+            <span class="exp-tag">${window.escHtml(categoria)}</span>
+            <div class="exp-name">${window.escHtml(ml(exp.nombre))}</div>
+            <p class="exp-desc">${window.escHtml(ml(exp.descripcion))}</p>
             <button class="exp-btn">${window.t('exp-solicitar')}</button>
           </div>
         </div>

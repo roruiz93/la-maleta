@@ -118,7 +118,7 @@
 <!-- Scripts locales sin imports -->
 <script src="./src/firebase-config.js?v=202610011512"></script>
 <script src="./src/firebase-compat.js?v=202610011512"></script>
-<script src="./src/i18n-compat.js?v=202610012319"></script>
+<script src="./src/i18n-compat.js?v=202610032212"></script>
 
 <script>
   let todos = [];
@@ -256,8 +256,8 @@
     const cats = ["todos", ...new Set(todos.map(d => window.mlTexto(d.categoria)).filter(Boolean))];
     if (cats.length <= 2) { wrap.innerHTML = ""; return; }
     wrap.innerHTML = cats.map(c => `
-      <button class="filtro-btn ${c === filtro ? "active" : ""}" data-cat="${c.replace(/"/g, '&quot;')}" onclick="filtrarDest(this.dataset.cat)">
-        ${c === "todos" ? window.t('filtro-todos') : c}
+      <button class="filtro-btn ${c === filtro ? "active" : ""}" data-cat="${window.escHtml(c)}" onclick="filtrarDest(this.dataset.cat)">
+        ${c === "todos" ? window.t('filtro-todos') : window.escHtml(c)}
       </button>`).join("");
   }
 
@@ -290,14 +290,14 @@
     const descCorta = ml(d.descripcionCorta) || ml(d.descripcion).slice(0, 90);
     const precio = window.textoPrecio(d.precio);
     return `
-      <a class="destino-card-full" href="./ver-destino.html?id=${d.id}">
+      <a class="destino-card-full" href="./ver-destino.html?id=${encodeURIComponent(d.id)}">
         <div class="dcf-img">
-          <img src="${img}" alt="${nombre}" loading="lazy">
-          ${window.mlTexto(d.categoria) ? `<span class="dcf-badge">${window.mlTexto(d.categoria)}</span>` : ""}
+          <img src="${window.escHtml(img)}" alt="${window.escHtml(nombre)}" loading="lazy">
+          ${window.mlTexto(d.categoria) ? `<span class="dcf-badge">${window.escHtml(window.mlTexto(d.categoria))}</span>` : ""}
         </div>
         <div class="dcf-body">
-          <div class="dcf-name">${nombre}</div>
-          <div class="dcf-desc">${descCorta}</div>
+          <div class="dcf-name">${window.escHtml(nombre)}</div>
+          <div class="dcf-desc">${window.escHtml(descCorta)}</div>
           <div class="dcf-footer">
             <span class="dcf-price">${precio}</span>
             <span class="dcf-btn">${window.t('destinos-ver-btn')}</span>

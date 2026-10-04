@@ -113,7 +113,7 @@
 <!-- Scripts locales sin imports -->
 <script src="./src/firebase-config.js?v=202610011512"></script>
 <script src="./src/firebase-compat.js?v=202610011512"></script>
-<script src="./src/i18n-compat.js?v=202610012319"></script>
+<script src="./src/i18n-compat.js?v=202610032212"></script>
 
 <script>
   function ml(field) {
@@ -260,15 +260,15 @@
       return `
         <article class="blog-card">
           <div class="blog-img">
-            <img src="${imagen}" alt="${titulo}" loading="lazy">
+            <img src="${window.escHtml(imagen)}" alt="${window.escHtml(titulo)}" loading="lazy">
           </div>
           <div class="blog-body">
-            ${post.categoria ? `<span class="blog-cat">${post.categoria}</span>` : ''}
-            <div class="blog-title">${titulo}</div>
-            <p class="blog-excerpt">${resumen}...</p>
+            ${post.categoria ? `<span class="blog-cat">${window.escHtml(post.categoria)}</span>` : ''}
+            <div class="blog-title">${window.escHtml(titulo)}</div>
+            <p class="blog-excerpt">${window.escHtml(resumen)}...</p>
             <div class="blog-meta">
               <span>${fecha}</span>
-              ${post.autor ? `<span>${post.autor}</span>` : ''}
+              ${post.autor ? `<span>${window.escHtml(post.autor)}</span>` : ''}
               <a href="#" style="color:var(--gold);font-weight:700;margin-left:auto">${window.t('blog-read-more')}</a>
             </div>
           </div>

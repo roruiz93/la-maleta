@@ -103,7 +103,7 @@
 <!-- Scripts locales sin imports -->
 <script src="./src/firebase-config.js?v=202610011512"></script>
 <script src="./src/firebase-compat.js?v=202610011512"></script>
-<script src="./src/i18n-compat.js?v=202610012319"></script>
+<script src="./src/i18n-compat.js?v=202610032212"></script>
 
 <script>
   window.addEventListener("DOMContentLoaded", async () => {
@@ -278,8 +278,9 @@
     const categoria = window.mlTexto(d.categoria);
     const duracion = window.mlTexto(d.duracion);
     document.title = `${nombre} — Viajes La Maleta`;
+    const h = window.escHtml;
     const incluye = listaIncluye.length
-      ? listaIncluye.map(i => `<li>${i}</li>`).join("")
+      ? listaIncluye.map(i => `<li>${h(i)}</li>`).join("")
       : `<li>${window.t('vd-info-consultar')}</li>`;
     const whatsappUrl = window.waUrl(num, msg) || `./contacto.html?destino=${encodeURIComponent(ml(d.nombre))}`;
     window._vdIdx = 0;
@@ -287,11 +288,11 @@
     const heroInfo = `
       <div class="vd-hero-ov"></div>
       <div class="vd-hero-info">
-        <span class="vd-tag">${categoria || window.t('breadcrumb-destino')}</span>
-        <h1>${nombre}</h1>
+        <span class="vd-tag">${categoria ? h(categoria) : window.t('breadcrumb-destino')}</span>
+        <h1>${h(nombre)}</h1>
         <div class="vd-meta">
-          <span>💰 ${precio}</span>
-          ${duracion ? `<span>📅 ${duracion}</span>` : ''}
+          <span>💰 ${h(precio)}</span>
+          ${duracion ? `<span>📅 ${h(duracion)}</span>` : ''}
         </div>
       </div>`;
 
@@ -300,7 +301,7 @@
         <div class="vd-carousel-track" id="vd-track">
           ${imagenes.map(img => `
             <div class="vd-carousel-slide">
-              <img src="${img}" alt="${nombre}" onerror="this.src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80'">
+              <img src="${h(img)}" alt="${h(nombre)}" onerror="this.src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80'">
             </div>`).join('')}
         </div>
         <button class="vd-carousel-btn prev" onclick="vdCarousel(-1)">&#8249;</button>
@@ -311,7 +312,7 @@
         ${heroInfo}
       </div>` : `
       <div class="vd-hero">
-        <img src="${imagenes[0]}" alt="${nombre}">
+        <img src="${h(imagenes[0])}" alt="${h(nombre)}">
         ${heroInfo}
       </div>`;
 
@@ -320,7 +321,7 @@
         <h2>${window.t('vd-galeria')}</h2>
         <div class="vd-galeria">
           ${imagenes.map((img, i) => `
-            <img src="${img}" alt="${nombre} ${i+1}" loading="lazy"
+            <img src="${h(img)}" alt="${h(nombre)} ${i+1}" loading="lazy"
               onclick="vdGoTo(${i}); window.scrollTo({top:0,behavior:'smooth'})"
               onerror="this.src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80'">
           `).join('')}
@@ -334,7 +335,7 @@
           <div>
             <div class="vd-section">
               <h2>${window.t('vd-descripcion')}</h2>
-              <p>${descripcion}</p>
+              <p>${h(descripcion).replace(/\r?\n/g, '<br>')}</p>
             </div>
             <div class="vd-section">
               <h2>${window.t('vd-incluye')}</h2>
@@ -346,12 +347,12 @@
             <div class="vd-reserve-box">
               <div class="vd-rb-precio">${Number(d.precio) > 0 ? window.formatPrecio(d.precio) : window.t('precio-consultar')}</div>
               ${Number(d.precio) > 0 ? `<div class="vd-rb-sub">${window.t('vd-precio-persona')}</div>` : ''}
-              <a href="${whatsappUrl}" target="_blank" class="vd-rb-wa">
+              <a href="${h(whatsappUrl)}" target="_blank" class="vd-rb-wa">
                 ${WA_SVG} ${window.t('vd-whatsapp-btn')}
               </a>
               <div class="vd-rb-detalles">
-                ${duracion ? `<div class="vd-rb-row"><span>📅</span><span>${duracion}</span></div>` : ''}
-                ${categoria ? `<div class="vd-rb-row"><span>🏷</span><span>${categoria}</span></div>` : ''}
+                ${duracion ? `<div class="vd-rb-row"><span>📅</span><span>${h(duracion)}</span></div>` : ''}
+                ${categoria ? `<div class="vd-rb-row"><span>🏷</span><span>${h(categoria)}</span></div>` : ''}
                 ${listaIncluye.length ? `<div class="vd-rb-row"><span>✓</span><span>${listaIncluye.length} ${window.t('vd-incluidos') || 'incluidos'}</span></div>` : ''}
               </div>
             </div>
