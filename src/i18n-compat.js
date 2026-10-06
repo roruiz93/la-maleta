@@ -429,9 +429,9 @@ document.addEventListener && document.addEventListener('DOMContentLoaded', () =>
 });
 
 // ── Logo del sitio (Configuración → Logo) ─────────────────
-// La imagen va en un <img> propio dentro del encabezado y del pie: el texto
-// ("Viajes La Maleta", editable con data-field="logo") queda oculto mientras
-// haya logo, así applyLang() puede seguir actualizándolo sin pisar la imagen.
+// La imagen va en un <img> propio dentro del encabezado y del pie y reemplaza
+// solo al dibujo de la maleta: el nombre "Viajes La Maleta" (fijo, siempre en
+// castellano, no editable) se ve siempre al lado.
 // Se recuerda en el navegador para mostrarlo sin esperar a Firestore.
 window.applySiteLogo = function(url) {
   const valido = typeof url === 'string' && /^https:\/\//.test(url);
@@ -440,10 +440,10 @@ window.applySiteLogo = function(url) {
     else localStorage.removeItem('web_logo');
   } catch (e) {}
   const lugares = [
-    { wrap: '.logo-wrap', texto: '.logo-txt', clase: 'site-logo-img' },
-    { wrap: '.footer-brand', texto: '.footer-name', clase: 'site-logo-img site-logo-footer' },
+    { wrap: '.logo-wrap', clase: 'site-logo-img' },
+    { wrap: '.footer-brand', clase: 'site-logo-img site-logo-footer' },
   ];
-  lugares.forEach(({ wrap, texto, clase }) => {
+  lugares.forEach(({ wrap, clase }) => {
     document.querySelectorAll(wrap).forEach(w => {
       let img = w.querySelector('img.site-logo-img');
       if (valido && !img) {
@@ -455,7 +455,7 @@ window.applySiteLogo = function(url) {
       if (img) {
         if (valido) img.src = url; else img.remove();
       }
-      w.querySelectorAll(texto + ', svg').forEach(el => { el.style.display = valido ? 'none' : ''; });
+      w.querySelectorAll('svg').forEach(el => { el.style.display = valido ? 'none' : ''; });
     });
   });
 };
