@@ -160,7 +160,7 @@
 <!-- Scripts locales sin imports -->
 <script src="./src/firebase-config.js?v=202610011512"></script>
 <script src="./src/firebase-compat.js?v=202610191200"></script>
-<script src="./src/i18n-compat.js?v=202610191200"></script>
+<script src="./src/i18n-compat.js?v=202610191400"></script>
 
 <script>
   let _destinosIds = [];
@@ -353,7 +353,7 @@
     }
 
     // Logo personalizado (o texto si no hay)
-    window.applySiteLogo(settings.logoUrl);
+    window.applySiteLogo(settings.logoUrl, settings.logoFooterUrl || null);
   }
 </script>
 </body>

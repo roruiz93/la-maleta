@@ -429,42 +429,59 @@ document.addEventListener && document.addEventListener('DOMContentLoaded', () =>
 });
 
 // ── Logo del sitio (Configuración → Logo) ─────────────────
-// El pie usa siempre img/logo-blanco.png (el logo subido no se ve sobre el
-// fondo oscuro). En el encabezado la imagen va en un <img> propio y reemplaza
-// solo al dibujo de la maleta: el nombre "Viajes La Maleta" (fijo, siempre en
-// castellano, no editable) se ve siempre al lado.
-// Se recuerda en el navegador para mostrarlo sin esperar a Firestore.
-window.applySiteLogo = function(url) {
-  const valido = typeof url === 'string' && /^https:\/\//.test(url);
+// Encabezado: la imagen va en un <img> propio y reemplaza solo al dibujo de la
+// maleta: el nombre "Viajes La Maleta" (fijo, siempre en castellano, no
+// editable) se ve siempre al lado.
+// Pie: "Logo de abajo" del admin (va sobre fondo oscuro); si no hay, el blanco
+// de img/logo-blanco.png que ya trae el HTML.
+// Se recuerdan en el navegador para mostrarlos sin esperar a Firestore.
+const LOGO_PIE_DEFECTO = './img/logo-blanco.png';
+const esUrlLogo = url => typeof url === 'string' && /^https:\/\//.test(url);
+
+window.applySiteLogo = function(url, urlPie) {
+  const valido = esUrlLogo(url);
   try {
     if (valido) localStorage.setItem('web_logo', url);
     else localStorage.removeItem('web_logo');
   } catch (e) {}
-  const lugares = [
-    { wrap: '.logo-wrap', clase: 'site-logo-img' },
-  ];
-  lugares.forEach(({ wrap, clase }) => {
-    document.querySelectorAll(wrap).forEach(w => {
-      let img = w.querySelector('img.site-logo-img');
-      if (valido && !img) {
-        img = document.createElement('img');
-        img.className = clase;
-        img.alt = 'Viajes La Maleta';
-        w.prepend(img);
-      }
-      if (img) {
-        if (valido) img.src = url; else img.remove();
-      }
-      w.querySelectorAll('svg').forEach(el => { el.style.display = valido ? 'none' : ''; });
-    });
+  document.querySelectorAll('.logo-wrap').forEach(w => {
+    let img = w.querySelector('img.site-logo-img');
+    if (valido && !img) {
+      img = document.createElement('img');
+      img.className = 'site-logo-img';
+      img.alt = 'Viajes La Maleta';
+      w.prepend(img);
+    }
+    if (img) {
+      if (valido) img.src = url; else img.remove();
+    }
+    w.querySelectorAll('svg').forEach(el => { el.style.display = valido ? 'none' : ''; });
+  });
+  // urlPie undefined = no se sabe todavía (no tocar el pie)
+  if (urlPie !== undefined) window.applyFooterLogo(urlPie);
+};
+
+window.applyFooterLogo = function(url) {
+  const valido = esUrlLogo(url);
+  try {
+    if (valido) localStorage.setItem('web_logo_pie', url);
+    else localStorage.removeItem('web_logo_pie');
+  } catch (e) {}
+  document.querySelectorAll('.footer-brand img.site-logo-footer').forEach(img => {
+    const src = valido ? url : LOGO_PIE_DEFECTO;
+    if (img.getAttribute('src') !== src) img.src = src;
   });
 };
 
-// Mostrar el último logo conocido apenas carga la página
+// Mostrar los últimos logos conocidos apenas carga la página
 document.addEventListener && document.addEventListener('DOMContentLoaded', () => {
-  let guardado = null;
-  try { guardado = localStorage.getItem('web_logo'); } catch (e) {}
+  let guardado = null, guardadoPie = null;
+  try {
+    guardado = localStorage.getItem('web_logo');
+    guardadoPie = localStorage.getItem('web_logo_pie');
+  } catch (e) {}
   if (guardado) window.applySiteLogo(guardado);
+  if (guardadoPie) window.applyFooterLogo(guardadoPie);
 });
 
 // ── Vista previa desde el admin ──────────────────────────
