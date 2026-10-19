@@ -429,7 +429,8 @@ document.addEventListener && document.addEventListener('DOMContentLoaded', () =>
 });
 
 // ── Logo del sitio (Configuración → Logo) ─────────────────
-// La imagen va en un <img> propio dentro del encabezado y del pie y reemplaza
+// El pie usa siempre img/logo-blanco.png (el logo subido no se ve sobre el
+// fondo oscuro). En el encabezado la imagen va en un <img> propio y reemplaza
 // solo al dibujo de la maleta: el nombre "Viajes La Maleta" (fijo, siempre en
 // castellano, no editable) se ve siempre al lado.
 // Se recuerda en el navegador para mostrarlo sin esperar a Firestore.
@@ -441,7 +442,6 @@ window.applySiteLogo = function(url) {
   } catch (e) {}
   const lugares = [
     { wrap: '.logo-wrap', clase: 'site-logo-img' },
-    { wrap: '.footer-brand', clase: 'site-logo-img site-logo-footer' },
   ];
   lugares.forEach(({ wrap, clase }) => {
     document.querySelectorAll(wrap).forEach(w => {
