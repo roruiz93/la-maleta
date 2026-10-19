@@ -27,19 +27,36 @@ window.listenContent = function(callback) {
 };
 
 // Imágenes editables desde el admin (site/images): { "e1-img": url, ... }
-// Se aplican a los <img data-img="..."> de la página.
+// Se aplican a los <img data-img="..."> de la página. Los que tienen
+// data-default (foto de ejemplo) arrancan sin src y ocultos, para que no se vea
+// la de ejemplo mientras llega Firestore: primero se usa la última versión
+// guardada en el navegador y, si no hay foto subida, se pone la de ejemplo.
 window.listenImages = function(callback) {
   return db.collection("site").doc("images").onSnapshot(snap => {
-    if (snap.exists) callback(snap.data());
+    const data = snap.exists ? snap.data() : {};
+    try { localStorage.setItem("web_images", JSON.stringify(data)); } catch (e) {}
+    callback(data);
+  }, () => callback({}));
+};
+
+window.applySiteImages = function(images, soloConocidas) {
+  document.querySelectorAll("img[data-img]").forEach(el => {
+    const url = images[el.dataset.img];
+    const valida = typeof url === "string" && /^https:\/\//.test(url);
+    if (valida) el.src = url;
+    else if (soloConocidas) return;
+    else if (el.dataset.default && !el.getAttribute("src")) el.src = el.dataset.default;
+    el.classList.add("img-lista");
   });
 };
 
-window.applySiteImages = function(images) {
-  document.querySelectorAll("img[data-img]").forEach(el => {
-    const url = images[el.dataset.img];
-    if (typeof url === "string" && url) el.src = url;
-  });
-};
+(function () {
+  let guardadas = null;
+  try { guardadas = JSON.parse(localStorage.getItem("web_images") || "null"); } catch (e) {}
+  if (guardadas) window.applySiteImages(guardadas, true);
+  // Si Firestore no responde, mostrar igual las de ejemplo
+  setTimeout(() => window.applySiteImages({}), 5000);
+})();
 
 // ─────────────────────────────
 // COLORS
