@@ -24,3 +24,6 @@ Thumbs.db
 
 # ─── Firebase ────────────────────────────────────────────────
 .firebase/
+
+# Paquete para hosting Plesk (generado)
+_plesk/

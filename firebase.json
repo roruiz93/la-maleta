@@ -14,7 +14,9 @@
       "simple-server.js",
       "test-translations.html",
       "**/*.md",
-      "vercel.json"
+      "vercel.json",
+      "_plesk/**",
+      "dist/**"
     ],
     "headers": [
       {
